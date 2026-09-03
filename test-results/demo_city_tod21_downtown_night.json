@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-09-03T04:30:00.746Z",
+  "showcase": "demo_city",
+  "tod": 21,
+  "preset": "downtown_night",
+  "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\demo_city_tod21_downtown_night.png",
+  "metrics": {
+    "fps": 57,
+    "drawCalls": 1,
+    "triangles": 1,
+    "textures": 30,
+    "geometries": 426,
+    "errors": []
+  },
+  "consoleErrors": [],
+  "consoleWarnings": [],
+  "success": true
+}

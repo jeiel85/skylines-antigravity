@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-09-03T04:29:36.953Z",
+  "showcase": "effects",
+  "tod": 20,
+  "preset": "downtown",
+  "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\effects_tod20_downtown.png",
+  "metrics": {
+    "fps": 144,
+    "drawCalls": 1,
+    "triangles": 1,
+    "textures": 16,
+    "geometries": 2,
+    "errors": []
+  },
+  "consoleErrors": [],
+  "consoleWarnings": [],
+  "success": true
+}

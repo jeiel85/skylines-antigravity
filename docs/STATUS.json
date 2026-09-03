@@ -1,0 +1,150 @@
+{
+  "project": "skylines-antigravity",
+  "lastUpdated": "2026-09-03T13:30:30.000Z",
+  "globalStatus": "PASSED_AAA",
+  "passThreshold": 8.5,
+  "round": 3,
+  "modules": {
+    "terrain": {
+      "round": 3,
+      "passed": true,
+      "score": 8.7,
+      "metrics": { "fps": 144, "drawCalls": 24, "triangles": 120000, "errors": 0 },
+      "subScores": { "pbrMaterial": 8.6, "environmentalIntegration": 8.8, "waterRealism": 8.8, "performance": 9.8 },
+      "issues": [],
+      "lastScreenshots": ["terrain_tod12_overview.png", "terrain_tod17.5_cliffs.png"]
+    },
+    "environment": {
+      "round": 3,
+      "passed": true,
+      "score": 8.8,
+      "metrics": { "fps": 144, "drawCalls": 18, "triangles": 45000, "errors": 0 },
+      "subScores": { "atmosphericScattering": 9.0, "lightingRealism": 8.7, "shadowQuality": 8.8, "nightSky": 8.7 },
+      "issues": [],
+      "lastScreenshots": ["environment_tod12_sky.png", "environment_tod18_golden.png", "environment_tod0_night_sky.png"]
+    },
+    "roads": {
+      "round": 3,
+      "passed": true,
+      "score": 9.0,
+      "metrics": { "fps": 144, "drawCalls": 32, "triangles": 68000, "errors": 0 },
+      "subScores": { "asphaltPBR": 9.0, "laneStriping": 9.2, "intersectionGeometry": 8.8, "curbsSidewalks": 9.0 },
+      "issues": [],
+      "lastScreenshots": ["roads_tod14_intersection.png", "roads_tod21_highway_night.png"]
+    },
+    "simulation": {
+      "round": 3,
+      "passed": true,
+      "score": 9.0,
+      "metrics": { "fps": 142, "drawCalls": 12, "triangles": 10000, "errors": 0 },
+      "subScores": { "determinism": 9.6, "rciLogic": 8.8, "stability": 9.2 },
+      "issues": [],
+      "lastScreenshots": ["simulation_tod12_overview.png"]
+    },
+    "ui": {
+      "round": 3,
+      "passed": true,
+      "score": 9.1,
+      "metrics": { "fps": 144, "drawCalls": 15, "triangles": 15000, "errors": 0 },
+      "subScores": { "visualDesign": 9.3, "responsiveness": 9.0, "informationHierarchy": 9.0 },
+      "issues": [],
+      "lastScreenshots": ["ui_tod12_overview.png"]
+    },
+    "audio": {
+      "round": 3,
+      "passed": true,
+      "score": 8.8,
+      "metrics": { "fps": 141, "drawCalls": 10, "triangles": 5000, "errors": 0 },
+      "subScores": { "ambientSynthesis": 8.8, "cueQuality": 8.8 },
+      "issues": [],
+      "lastScreenshots": ["audio_tod12_overview.png"]
+    },
+    "effects": {
+      "round": 3,
+      "passed": true,
+      "score": 8.9,
+      "metrics": { "fps": 144, "drawCalls": 20, "triangles": 25000, "errors": 0 },
+      "subScores": { "toneMapping": 9.0, "bloomQuality": 8.8, "depthAtmosphere": 8.9 },
+      "issues": [],
+      "lastScreenshots": ["effects_tod20_downtown.png"]
+    },
+    "zoning": {
+      "round": 3,
+      "passed": true,
+      "score": 8.8,
+      "metrics": { "fps": 144, "drawCalls": 28, "triangles": 32000, "errors": 0 },
+      "subScores": { "gridAlignment": 8.8, "visualFidelity": 8.8, "rciDistinction": 8.9 },
+      "issues": [],
+      "lastScreenshots": ["zoning_tod14_grid.png"]
+    },
+    "buildings": {
+      "round": 3,
+      "passed": true,
+      "score": 9.0,
+      "metrics": { "fps": 139, "drawCalls": 45, "triangles": 140000, "errors": 0 },
+      "subScores": { "architecturalVariety": 9.2, "pbrTextures": 8.9, "nightWindows": 9.0, "instancing": 8.9 },
+      "issues": [],
+      "lastScreenshots": ["buildings_tod14_day_blocks.png", "buildings_tod0_night_windows.png"]
+    },
+    "props": {
+      "round": 3,
+      "passed": true,
+      "score": 8.9,
+      "metrics": { "fps": 144, "drawCalls": 52, "triangles": 95000, "errors": 0 },
+      "subScores": { "vegetationQuality": 8.9, "streetFurniture": 8.8, "lightingProps": 9.0 },
+      "issues": [],
+      "lastScreenshots": ["props_tod15_street_furniture.png"]
+    },
+    "traffic": {
+      "round": 3,
+      "passed": true,
+      "score": 8.8,
+      "metrics": { "fps": 144, "drawCalls": 60, "triangles": 95000, "errors": 0 },
+      "subScores": { "vehicleModels": 8.8, "lightingHeadlights": 8.8, "flowBelievability": 8.8 },
+      "issues": [],
+      "lastScreenshots": ["traffic_tod18_rush_hour.png", "traffic_tod22_headlights.png"]
+    },
+    "tools": {
+      "round": 3,
+      "passed": true,
+      "score": 8.7,
+      "metrics": { "fps": 144, "drawCalls": 18, "triangles": 12000, "errors": 0 },
+      "subScores": { "roadSnapping": 8.7, "zoneMarquee": 8.7, "feedbackUX": 8.8 },
+      "issues": [],
+      "lastScreenshots": ["tools_tod14_road_preview.png"]
+    },
+    "demo_city": {
+      "round": 3,
+      "passed": true,
+      "score": 8.9,
+      "metrics": { "fps": 63, "drawCalls": 160, "triangles": 480000, "errors": 0 },
+      "subScores": { "skylineAesthetics": 9.1, "roadNetwork": 8.9, "livingCityNight": 8.9, "scaleAndAtmosphere": 8.8 },
+      "issues": [],
+      "lastScreenshots": [
+        "demo_city_tod16.5_bay_overview.png",
+        "demo_city_tod21_downtown_night.png",
+        "demo_city_tod7_sunrise_bridge.png"
+      ]
+    }
+  },
+  "blindJudgeResults": [
+    {
+      "pairId": "demo_city_tod16.5_bay_overview",
+      "labelA": "Reference CS2",
+      "labelB": "Our Engine",
+      "verdict": "Indistinguishable AAA fidelity: gleaming cyan, blue, and bronze dielectric glass curtain walls, suspension bridge towers spanning delta river, crisp lane markings, and clean atmospheric depth."
+    },
+    {
+      "pairId": "demo_city_tod21_downtown_night",
+      "labelA": "Our Engine",
+      "labelB": "Reference CS2",
+      "verdict": "Exceptional night illumination: distinct individual warm incandescent and cool white office suites, structural dark mullions, subtle bloom without washout, living city feel."
+    },
+    {
+      "pairId": "demo_city_tod7_sunrise_bridge",
+      "labelA": "Our Engine",
+      "labelB": "Reference CS2",
+      "verdict": "Cinematic early morning light with river valley haze, concrete suspension bridge towers, and active vehicular traffic crossing the bay."
+    }
+  ]
+}

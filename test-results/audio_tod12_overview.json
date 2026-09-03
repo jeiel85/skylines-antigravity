@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-09-03T04:29:34.467Z",
+  "showcase": "audio",
+  "tod": 12,
+  "preset": "overview",
+  "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\audio_tod12_overview.png",
+  "metrics": {
+    "fps": 141,
+    "drawCalls": 1,
+    "triangles": 1,
+    "textures": 14,
+    "geometries": 1,
+    "errors": []
+  },
+  "consoleErrors": [],
+  "consoleWarnings": [],
+  "success": true
+}

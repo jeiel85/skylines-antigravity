@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-09-03T04:29:41.990Z",
+  "showcase": "buildings",
+  "tod": 14,
+  "preset": "day_blocks",
+  "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\buildings_tod14_day_blocks.png",
+  "metrics": {
+    "fps": 139,
+    "drawCalls": 1,
+    "triangles": 1,
+    "textures": 23,
+    "geometries": 15,
+    "errors": []
+  },
+  "consoleErrors": [],
+  "consoleWarnings": [],
+  "success": true
+}

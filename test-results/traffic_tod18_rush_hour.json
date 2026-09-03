@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-09-03T04:29:49.343Z",
+  "showcase": "traffic",
+  "tod": 18,
+  "preset": "rush_hour",
+  "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\traffic_tod18_rush_hour.png",
+  "metrics": {
+    "fps": 142,
+    "drawCalls": 1,
+    "triangles": 1,
+    "textures": 17,
+    "geometries": 39,
+    "errors": []
+  },
+  "consoleErrors": [],
+  "consoleWarnings": [],
+  "success": true
+}

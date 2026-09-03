@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-09-03T05:12:57.421Z",
+  "showcase": "demo_city",
+  "tod": 14,
+  "preset": "ikea_costco",
+  "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\demo_city_tod14_yr2004_ikea_costco.png",
+  "metrics": {
+    "fps": 100,
+    "drawCalls": 1,
+    "triangles": 1,
+    "textures": 20,
+    "geometries": 553,
+    "errors": []
+  },
+  "consoleErrors": [],
+  "consoleWarnings": [],
+  "success": true
+}

@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-09-03T05:02:46.568Z",
+  "timestamp": "2026-09-03T05:13:40.096Z",
   "showcase": "roads",
   "tod": 14,
   "preset": "intersection",
   "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\roads_tod14_intersection.png",
   "metrics": {
-    "fps": 142,
+    "fps": 134,
     "drawCalls": 1,
     "triangles": 1,
     "textures": 18,

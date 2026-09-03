@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-09-03T05:02:43.734Z",
+  "timestamp": "2026-09-03T05:13:37.215Z",
   "showcase": "environment",
   "tod": 0,
   "preset": "night_sky",
   "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\environment_tod0_night_sky.png",
   "metrics": {
-    "fps": 136,
+    "fps": 144,
     "drawCalls": 1,
     "triangles": 1,
     "textures": 14,

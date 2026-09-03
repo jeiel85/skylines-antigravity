@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-09-03T05:03:02.766Z",
+  "timestamp": "2026-09-03T05:13:54.961Z",
   "showcase": "zoning",
   "tod": 14,
   "preset": "grid",
   "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\zoning_tod14_grid.png",
   "metrics": {
-    "fps": 134,
+    "fps": 144,
     "drawCalls": 1,
     "triangles": 1,
     "textures": 14,

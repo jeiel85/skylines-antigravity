@@ -13,6 +13,8 @@ const params = {
   showcase: 'demo_city',
   tod: 12,
   preset: 'overview',
+  weather: 'clear',
+  year: 2026,
   output: null,
   port: 5173,
   width: 1920,
@@ -24,6 +26,8 @@ for (const arg of args) {
   if (arg.startsWith('--showcase=')) params.showcase = arg.split('=')[1];
   else if (arg.startsWith('--tod=')) params.tod = parseFloat(arg.split('=')[1]);
   else if (arg.startsWith('--preset=')) params.preset = arg.split('=')[1];
+  else if (arg.startsWith('--weather=')) params.weather = arg.split('=')[1];
+  else if (arg.startsWith('--year=')) params.year = parseInt(arg.split('=')[1], 10);
   else if (arg.startsWith('--output=')) params.output = arg.split('=')[1];
   else if (arg.startsWith('--port=')) params.port = parseInt(arg.split('=')[1], 10);
   else if (arg.startsWith('--width=')) params.width = parseInt(arg.split('=')[1], 10);
@@ -49,11 +53,20 @@ const resultsDir = path.join(rootDir, 'test-results');
 if (!fs.existsSync(screenshotsDir)) fs.mkdirSync(screenshotsDir, { recursive: true });
 if (!fs.existsSync(resultsDir)) fs.mkdirSync(resultsDir, { recursive: true });
 
-const targetFilename = params.output || `${params.showcase}_tod${params.tod}_${params.preset}.png`;
+let targetFilename = params.output;
+if (!targetFilename) {
+  let nameParts = [`${params.showcase}_tod${params.tod}`];
+  if (params.weather && params.weather !== 'clear') nameParts.push(params.weather);
+  if (params.year && params.year !== 2026) nameParts.push(`yr${params.year}`);
+  nameParts.push(params.preset);
+  targetFilename = `${nameParts.join('_')}.png`;
+}
 const outputPath = path.isAbsolute(targetFilename) ? targetFilename : path.join(screenshotsDir, targetFilename);
 const resultPath = path.join(resultsDir, `${path.basename(outputPath, '.png')}.json`);
 
-const targetUrl = `http://127.0.0.1:${params.port}/?showcase=${encodeURIComponent(params.showcase)}&tod=${params.tod}&cam=${encodeURIComponent(params.preset)}`;
+let targetUrl = `http://127.0.0.1:${params.port}/?showcase=${encodeURIComponent(params.showcase)}&tod=${params.tod}&cam=${encodeURIComponent(params.preset)}`;
+if (params.weather && params.weather !== 'clear') targetUrl += `&weather=${encodeURIComponent(params.weather)}`;
+if (params.year && params.year !== 2026) targetUrl += `&year=${params.year}`;
 
 async function run() {
   console.log(`[Verify] Starting screenshot verification...`);

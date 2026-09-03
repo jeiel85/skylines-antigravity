@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-09-03T05:02:49.869Z",
+  "timestamp": "2026-09-03T05:13:42.761Z",
   "showcase": "roads",
   "tod": 21,
   "preset": "highway_night",
   "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\roads_tod21_highway_night.png",
   "metrics": {
-    "fps": 137,
+    "fps": 145,
     "drawCalls": 1,
     "triangles": 1,
     "textures": 18,

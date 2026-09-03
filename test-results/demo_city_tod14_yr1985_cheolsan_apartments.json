@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-09-03T05:12:32.215Z",
+  "showcase": "demo_city",
+  "tod": 14,
+  "preset": "cheolsan_apartments",
+  "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\demo_city_tod14_yr1985_cheolsan_apartments.png",
+  "metrics": {
+    "fps": 93,
+    "drawCalls": 1,
+    "triangles": 1,
+    "textures": 31,
+    "geometries": 586,
+    "errors": []
+  },
+  "consoleErrors": [],
+  "consoleWarnings": [],
+  "success": true
+}

@@ -366,4 +366,229 @@ export class AssetManager {
     this.materials.set('water', material);
     return material;
   }
+
+  /**
+   * 7. Korean High-Rise Apartment Balcony Facade PBR
+   */
+  getKoreanApartmentFacadeMaterial() {
+    if (this.materials.has('k_apt_facade')) return this.materials.get('k_apt_facade');
+
+    const size = 512;
+    const canvasA = document.createElement('canvas');
+    canvasA.width = size;
+    canvasA.height = size;
+    const ctxA = canvasA.getContext('2d');
+
+    // Base concrete/plaster (off-white / warm light grey)
+    ctxA.fillStyle = '#e2e4e6';
+    ctxA.fillRect(0, 0, size, size);
+
+    // Vertical accent stripes common in Korean complexes (Haan/Cheolsan style)
+    ctxA.fillStyle = '#3a5f82'; // Korean apartment brand blue/green accent
+    ctxA.fillRect(size * 0.46, 0, size * 0.08, size);
+
+    const cols = 8;
+    const rows = 16;
+    const cellW = size / cols;
+    const cellH = size / rows;
+
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const x = c * cellW;
+        const y = r * cellH;
+
+        // Window glass
+        ctxA.fillStyle = '#1c2833';
+        ctxA.fillRect(x + 4, y + 4, cellW - 8, cellH * 0.55);
+
+        // Balcony concrete parapet & safety handrail
+        ctxA.fillStyle = '#cfd4d8';
+        ctxA.fillRect(x + 2, y + cellH * 0.58, cellW - 4, cellH * 0.38);
+
+        // Balcony horizontal bar railing
+        ctxA.strokeStyle = '#5a626a';
+        ctxA.lineWidth = 1.5;
+        ctxA.beginPath();
+        ctxA.moveTo(x + 4, y + cellH * 0.68);
+        ctxA.lineTo(x + cellW - 4, y + cellH * 0.68);
+        ctxA.stroke();
+      }
+    }
+
+    const albedo = this._createCanvasTexture(canvasA, false, 1, 1);
+
+    // Emissive night window map
+    const canvasE = document.createElement('canvas');
+    canvasE.width = size;
+    canvasE.height = size;
+    const ctxE = canvasE.getContext('2d');
+    ctxE.fillStyle = '#000000';
+    ctxE.fillRect(0, 0, size, size);
+
+    const aptNightPalettes = ['#ffd480', '#ffe8b3', '#fff4db', '#fae6be'];
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        if (Math.random() < 0.58) {
+          const x = c * cellW + 6;
+          const y = r * cellH + 6;
+          const w = cellW - 12;
+          const h = cellH * 0.50;
+          ctxE.fillStyle = aptNightPalettes[Math.floor(Math.random() * aptNightPalettes.length)];
+          ctxE.fillRect(x, y, w, h);
+        }
+      }
+    }
+
+    const emissive = this._createCanvasTexture(canvasE, false, 1, 1);
+
+    const material = new THREE.MeshStandardMaterial({
+      map: albedo,
+      emissiveMap: emissive,
+      emissive: new THREE.Color(0xffffff),
+      emissiveIntensity: 0.0,
+      roughness: 0.55,
+      metalness: 0.08
+    });
+
+    this.materials.set('k_apt_facade', material);
+    return material;
+  }
+
+  /**
+   * 8. Korean Apartment Gable Wall with Bold Building Number (e.g. 101, 203)
+   */
+  getKoreanApartmentGableMaterial(buildingNum = '101') {
+    const key = `k_apt_gable_${buildingNum}`;
+    if (this.materials.has(key)) return this.materials.get(key);
+
+    const size = 512;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+
+    // Off-white architectural concrete
+    ctx.fillStyle = '#dce0e3';
+    ctx.fillRect(0, 0, size, size);
+
+    // Distinctive top and side brand accent bands
+    ctx.fillStyle = '#2c4d6f';
+    ctx.fillRect(0, 0, size, 50);
+    ctx.fillRect(0, 0, 45, size);
+
+    // Complex name text at top
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 22px "Malgun Gothic", sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('광명철산', 60, 34);
+
+    // Stenciled large bold Korean apartment building number (e.g. "101")
+    ctx.fillStyle = '#1c344d';
+    ctx.font = '900 110px "Malgun Gothic", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(buildingNum, size * 0.55, size * 0.42);
+
+    // Subtle concrete construction joints
+    ctx.strokeStyle = '#c4c8cc';
+    ctx.lineWidth = 2;
+    for (let y = 80; y < size; y += 40) {
+      ctx.beginPath();
+      ctx.moveTo(45, y);
+      ctx.lineTo(size, y);
+      ctx.stroke();
+    }
+
+    const texture = this._createCanvasTexture(canvas, false, 1, 1);
+    const material = new THREE.MeshStandardMaterial({
+      map: texture,
+      roughness: 0.72,
+      metalness: 0.04
+    });
+
+    this.materials.set(key, material);
+    return material;
+  }
+
+  /**
+   * 9. KTX Gwangmyeong Station Arched Glass & Space-Truss Canopy Material
+   */
+  getKTXCanopyMaterial() {
+    if (this.materials.has('ktx_canopy')) return this.materials.get('ktx_canopy');
+
+    const size = 512;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+
+    // Translucent light blue structural glazing
+    ctx.fillStyle = '#4f7d99';
+    ctx.fillRect(0, 0, size, size);
+
+    // Diagonal diamond steel space-truss pattern
+    ctx.strokeStyle = '#eef5fa';
+    ctx.lineWidth = 3.5;
+
+    const step = 32;
+    for (let x = -size; x < size * 2; x += step) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x + size, size);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(x + size, 0);
+      ctx.lineTo(x, size);
+      ctx.stroke();
+    }
+
+    const texture = this._createCanvasTexture(canvas, true, 8, 4);
+    const material = new THREE.MeshStandardMaterial({
+      map: texture,
+      color: 0x98c5dd,
+      roughness: 0.15,
+      metalness: 0.75,
+      transparent: true,
+      opacity: 0.82
+    });
+
+    this.materials.set('ktx_canopy', material);
+    return material;
+  }
+
+  /**
+   * 10. Kia AutoLand Gwangmyeong Factory Corrugated Siding Material
+   */
+  getKiaFactorySidingMaterial() {
+    if (this.materials.has('kia_factory')) return this.materials.get('kia_factory');
+
+    const size = 256;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+
+    // Industrial coated sheet metal (slate grey / blue-grey)
+    ctx.fillStyle = '#546270';
+    ctx.fillRect(0, 0, size, size);
+
+    // Corrugated vertical ribbed shadow profile
+    const ribStep = 8;
+    for (let x = 0; x < size; x += ribStep) {
+      ctx.fillStyle = '#3e4954';
+      ctx.fillRect(x, 0, ribStep * 0.4, size);
+      ctx.fillStyle = '#6a7b8c';
+      ctx.fillRect(x + ribStep * 0.4, 0, ribStep * 0.6, size);
+    }
+
+    const texture = this._createCanvasTexture(canvas, true, 4, 1);
+    const material = new THREE.MeshStandardMaterial({
+      map: texture,
+      roughness: 0.50,
+      metalness: 0.45
+    });
+
+    this.materials.set('kia_factory', material);
+    return material;
+  }
 }

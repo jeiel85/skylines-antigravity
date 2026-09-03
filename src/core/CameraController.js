@@ -49,10 +49,14 @@ export class CameraController {
       rush_hour: { target: [0, 6, 0], radius: 65, theta: 2.2, phi: 1.1 },
       headlights: { target: [-40, 6.5, 0], radius: 30, theta: 3.1, phi: 1.38 },
       road_preview: { target: [0, 6, 0], radius: 85, theta: 0.78, phi: 0.85 },
-      grid: { target: [0, 6, 0], radius: 75, theta: 0.78, phi: 0.9 },
       bay_overview: { target: [0, 20, 0], radius: 280, theta: 3.8, phi: 1.15 },
-      downtown_night: { target: [15, 18, 10], radius: 210, theta: 2.45, phi: 1.2 },
-      sunrise_bridge: { target: [-170, 18, 0], radius: 130, theta: 2.7, phi: 1.24 }
+      downtown_night: { target: [25, 20, 145], radius: 240, theta: 2.35, phi: 1.15 },
+      sunrise_bridge: { target: [150, 10, -45], radius: 140, theta: 2.2, phi: 1.15 },
+      cheolsan_apartments: { target: [45, 18, -65], radius: 145, theta: 2.1, phi: 1.15 },
+      ktx_station: { target: [20, 16, 145], radius: 180, theta: 2.3, phi: 1.18 },
+      dodeoksan_bridge: { target: [-25, 36, -145], radius: 85, theta: 0.85, phi: 0.82 },
+      anyangcheon_bridge: { target: [150, 10, -45], radius: 140, theta: 2.2, phi: 1.15 },
+      gureumsan_overview: { target: [20, 20, 0], radius: 320, theta: 3.6, phi: 1.12 }
     };
 
     this.bindEvents();

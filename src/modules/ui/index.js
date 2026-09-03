@@ -61,8 +61,8 @@ export class UIModule {
               box-shadow: 0 0 10px #00d26a;
             "></div>
             <div>
-              <div style="font-weight: 700; font-size: 15px; letter-spacing: 0.5px;">NEW ANTIGRAVITY BAY</div>
-              <div style="font-size: 11px; color: #8fa0b5; text-transform: uppercase;">Metropolis Stage 4</div>
+              <div style="font-weight: 700; font-size: 15px; letter-spacing: 0.5px;">광명시 (GWANGMYEONG-SI)</div>
+              <div style="font-size: 11px; color: #8fa0b5; text-transform: uppercase;">철산 · 하안 · 소하 · 일직 KTX 역세권</div>
             </div>
           </div>
 

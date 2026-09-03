@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-09-03T04:45:46.865Z",
+  "showcase": "demo_city",
+  "tod": 16.5,
+  "preset": "ktx_station",
+  "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\demo_city_tod16.5_ktx_station.png",
+  "metrics": {
+    "fps": 75,
+    "drawCalls": 1,
+    "triangles": 1,
+    "textures": 32,
+    "geometries": 493,
+    "errors": []
+  },
+  "consoleErrors": [],
+  "consoleWarnings": [],
+  "success": true
+}

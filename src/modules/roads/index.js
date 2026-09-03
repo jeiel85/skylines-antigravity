@@ -252,6 +252,103 @@ export class RoadsModule {
     return group;
   }
 
+  /**
+   * Generates Cheolsan Bridge (철산교) concrete girder cross-river bridge across Anyangcheon
+   */
+  createCheolsanBridgeStructure(pStart, pEnd, width = 16) {
+    const group = new THREE.Group();
+    const concreteMat = this.engine.assets.getConcreteMaterial();
+    const steelMat = new THREE.MeshStandardMaterial({ color: 0x3a424a, metalness: 0.8, roughness: 0.3 });
+
+    const dx = pEnd.x - pStart.x;
+    const dz = pEnd.z - pStart.z;
+    const len = Math.hypot(dx, dz);
+    const midY = (pStart.y + pEnd.y) * 0.5;
+
+    // Sub-deck longitudinal steel girders
+    const girderGeo = new THREE.BoxGeometry(width * 0.85, 2.0, len);
+    const girder = new THREE.Mesh(girderGeo, steelMat);
+    girder.position.set((pStart.x + pEnd.x) * 0.5, midY - 1.2, (pStart.z + pEnd.z) * 0.5);
+    const angle = Math.atan2(dx, dz);
+    girder.rotation.y = angle;
+    girder.castShadow = true;
+    group.add(girder);
+
+    // Concrete piers sinking down into Anyangcheon riverbed
+    const numPiers = Math.max(2, Math.floor(len / 35));
+    for (let i = 1; i <= numPiers; i++) {
+      const t = i / (numPiers + 1);
+      const px = pStart.x + dx * t;
+      const pz = pStart.z + dz * t;
+      const py = pStart.y + (pEnd.y - pStart.y) * t;
+
+      const pierH = Math.max(4.0, py - 2.0);
+      const pierGeo = new THREE.BoxGeometry(width * 0.65, pierH, 4.5);
+      const pier = new THREE.Mesh(pierGeo, concreteMat);
+      pier.position.set(px, py - pierH * 0.5 - 0.2, pz);
+      pier.rotation.y = angle;
+      pier.castShadow = true;
+      group.add(pier);
+    }
+
+    return group;
+  }
+
+  /**
+   * Generates the landmark Dodeoksan Y-Shaped Suspension Bridge (도덕산 출렁다리)
+   * Connecting 3 mountain ridge hiking trails above the gorge
+   */
+  createDodeoksanYBridge(hubPos, arm1, arm2, arm3) {
+    const group = new THREE.Group();
+    const deckMat = new THREE.MeshStandardMaterial({ color: 0xc44525, metalness: 0.6, roughness: 0.35 });
+    const cableMat = new THREE.MeshStandardMaterial({ color: 0x22262a, metalness: 0.9, roughness: 0.2 });
+    const pylonMat = new THREE.MeshStandardMaterial({ color: 0xb53018, metalness: 0.8, roughness: 0.3 });
+
+    // Central Triangular Suspension Hub
+    const hubGeo = new THREE.CylinderGeometry(4.5, 4.5, 0.8, 6);
+    const hub = new THREE.Mesh(hubGeo, deckMat);
+    hub.position.copy(hubPos);
+    hub.castShadow = true;
+    group.add(hub);
+
+    // 3 Bridge Arms radiating to the 3 mountain trailheads
+    const arms = [arm1, arm2, arm3];
+    for (const endPt of arms) {
+      const dx = endPt.x - hubPos.x;
+      const dz = endPt.z - hubPos.z;
+      const armLen = Math.hypot(dx, dz);
+      const armAngle = Math.atan2(dx, dz);
+      const midPos = hubPos.clone().lerp(endPt, 0.5);
+
+      // Walking Deck
+      const deckGeo = new THREE.BoxGeometry(2.4, 0.4, armLen);
+      const deck = new THREE.Mesh(deckGeo, deckMat);
+      deck.position.copy(midPos);
+      deck.rotation.y = armAngle;
+      deck.castShadow = true;
+      group.add(deck);
+
+      // Steel Pylon at mountain trail anchor
+      const pylonGeo = new THREE.BoxGeometry(1.2, 11.0, 1.2);
+      const pylon = new THREE.Mesh(pylonGeo, pylonMat);
+      pylon.position.set(endPt.x, endPt.y + 5.5, endPt.z);
+      pylon.castShadow = true;
+      group.add(pylon);
+
+      // Main Suspension Cables from Pylon top to Central Hub
+      const cableCurve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(endPt.x, endPt.y + 10.5, endPt.z),
+        new THREE.Vector3(midPos.x, midPos.y + 2.5, midPos.z),
+        new THREE.Vector3(hubPos.x, hubPos.y + 4.0, hubPos.z)
+      ]);
+      const cableGeo = new THREE.TubeGeometry(cableCurve, 16, 0.12, 6, false);
+      const cableMesh = new THREE.Mesh(cableGeo, cableMat);
+      group.add(cableMesh);
+    }
+
+    return group;
+  }
+
   showcase(stageGroup, options = {}) {
     // Underlying grass terrain plane so roads do not float in empty void
     const groundGeo = new THREE.PlaneGeometry(240, 240);

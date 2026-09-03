@@ -59,6 +59,14 @@ export class TrafficModule {
       roughness: 0.25
     }));
 
+    // Korean Metropolitan Bus Liveries (Green Branch Bus, Blue Trunk Bus, Red Express Bus)
+    const busPaints = [0x229954, 0x2471a3, 0xc0392b];
+    this.carMaterials.busPaints = busPaints.map(hex => new THREE.MeshStandardMaterial({
+      color: hex,
+      metalness: 0.70,
+      roughness: 0.30
+    }));
+
     // Projected night headlight beam on road (soft gradient additive blending)
     this.headlightBeamMaterial = new THREE.MeshBasicMaterial({
       color: 0xffe9b8,
@@ -75,7 +83,9 @@ export class TrafficModule {
     const w = isBus ? 2.4 : 1.8;
     const h = isBus ? 3.0 : 1.35;
 
-    const paint = this.carMaterials.paints[paintIndex % this.carMaterials.paints.length];
+    const paint = isBus
+      ? this.carMaterials.busPaints[paintIndex % this.carMaterials.busPaints.length]
+      : this.carMaterials.paints[paintIndex % this.carMaterials.paints.length];
 
     // Chassis body
     const bodyGeo = new THREE.BoxGeometry(w, h * 0.55, l);

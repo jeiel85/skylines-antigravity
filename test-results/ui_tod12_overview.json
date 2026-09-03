@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-09-03T04:29:32.061Z",
+  "timestamp": "2026-09-03T04:49:17.339Z",
   "showcase": "ui",
   "tod": 12,
   "preset": "overview",
   "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\ui_tod12_overview.png",
   "metrics": {
-    "fps": 144,
+    "fps": 103,
     "drawCalls": 1,
     "triangles": 1,
     "textures": 14,

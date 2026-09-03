@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-09-03T04:29:51.749Z",
+  "timestamp": "2026-09-03T04:49:40.783Z",
   "showcase": "traffic",
   "tod": 22,
   "preset": "headlights",
   "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\traffic_tod22_headlights.png",
   "metrics": {
-    "fps": 144,
+    "fps": 139,
     "drawCalls": 1,
     "triangles": 1,
     "textures": 17,

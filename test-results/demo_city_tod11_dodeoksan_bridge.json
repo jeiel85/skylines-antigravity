@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-09-03T04:47:37.735Z",
+  "showcase": "demo_city",
+  "tod": 11,
+  "preset": "dodeoksan_bridge",
+  "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\demo_city_tod11_dodeoksan_bridge.png",
+  "metrics": {
+    "fps": 117,
+    "drawCalls": 1,
+    "triangles": 1,
+    "textures": 24,
+    "geometries": 458,
+    "errors": []
+  },
+  "consoleErrors": [],
+  "consoleWarnings": [],
+  "success": true
+}

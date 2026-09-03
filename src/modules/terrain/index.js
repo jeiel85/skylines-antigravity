@@ -1,9 +1,13 @@
 import * as THREE from 'three';
 
 /**
- * AAA PBR Multi-Splat Terrain & Water Subsystem
- * Features multi-octave mountain ridges, hydraulic erosion gullies, slope-based rock cliffs,
- * lush meadows, coastal sand, and animated specular water.
+ * AAA Gwangmyeong-si Procedural Terrain & Hydrology Subsystem
+ * Faithful representation of Gwangmyeong's topography:
+ * - Anyangcheon (안양천) river valley on the eastern boundary
+ * - Dodeoksan (도덕산, ~183m) with gorge in the north
+ * - Gureumsan (구름산, ~240m) pine forest ridge in the center-west
+ * - Gahaksan (가학산) in the south-west
+ * - Cheolsan/Haan residential alluvial plains & Iljik KTX transit basin
  */
 export class TerrainModule {
   constructor() {
@@ -11,8 +15,6 @@ export class TerrainModule {
     this.engine = null;
     this.terrainMesh = null;
     this.waterMesh = null;
-    this.waterMaterial = null;
-    this.time = 0;
   }
 
   init(world, engine) {
@@ -24,45 +26,51 @@ export class TerrainModule {
   }
 
   /**
-   * Multi-octave procedural elevation function
+   * Topographic elevation model of Gwangmyeong-si
    */
   calculateElevation(x, z) {
-    // Distance from center
-    const d = Math.hypot(x, z);
+    // 1. Anyangcheon (안양천) River Channel along East (x ~ 140..170)
+    const riverMeander = Math.sin(z * 0.008) * 15.0;
+    const riverBedX = 145.0 + riverMeander;
+    const distToRiver = Math.abs(x - riverBedX);
+    const riverCarve = Math.max(0.0, 1.0 - distToRiver / 32.0);
 
-    // River meandering valley cutting from North to South-West
-    const riverX = Math.sin(z * 0.006) * 120 - 40;
-    const distToRiver = Math.abs(x - riverX);
-    const riverCarve = Math.max(0, 1.0 - distToRiver / 70.0);
+    // 2. Dodeoksan (도덕산, North Mountain & Gorge, peak at x=-30, z=-170)
+    const distDodeok = Math.hypot(x - (-30), z - (-170));
+    const dodeokRidge = Math.max(0.0, 1.0 - distDodeok / 120.0);
+    const dodeokGorge = Math.exp(-Math.pow((x - (-25)) / 18.0, 2) - Math.pow((z - (-145)) / 22.0, 2)) * 14.0;
+    const dodeokElevation = (Math.pow(dodeokRidge, 1.8) * 48.0 - dodeokGorge);
 
-    // Mountainous background towards North-East (+X, -Z)
-    const mountainWeight = Math.max(0, (x - z + 200) / 700.0);
-    const m1 = Math.sin(x * 0.005 + 1.2) * Math.cos(z * 0.005 - 0.7) * 45;
-    const m2 = Math.sin(x * 0.012 + 2.5) * Math.cos(z * 0.011 + 1.8) * 18;
-    const m3 = Math.sin(x * 0.028) * Math.sin(z * 0.024) * 6;
-    const mountains = (m1 + m2 + m3) * Math.pow(mountainWeight, 1.4);
+    // 3. Gureumsan (구름산, Central-West Mountain Ridge, peak at x=-55, z=20)
+    const distGureum = Math.hypot((x - (-55)) * 0.9, (z - 20) * 0.7);
+    const gureumRidge = Math.max(0.0, 1.0 - distGureum / 140.0);
+    const gureumNoise = Math.sin(x * 0.03) * Math.cos(z * 0.03) * 3.5;
+    const gureumElevation = Math.pow(gureumRidge, 1.6) * 62.0 + (gureumRidge > 0.1 ? gureumNoise : 0);
 
-    // Gentle coastal plateaus and rolling hills for city building
-    const h1 = Math.sin(x * 0.008) * Math.cos(z * 0.007) * 9;
-    const h2 = Math.cos(x * 0.016 + 0.5) * Math.sin(z * 0.014 - 0.3) * 4;
-    const plateaus = 10 + h1 + h2;
+    // 4. Gahaksan (가학산, South-West Mountain, peak at x=-65, z=220)
+    const distGahak = Math.hypot(x - (-65), z - 220);
+    const gahakRidge = Math.max(0.0, 1.0 - distGahak / 125.0);
+    const gahakElevation = Math.pow(gahakRidge, 1.7) * 52.0;
 
-    // Coastal slope towards ocean in South-West (-X, +Z)
-    const coastDrop = Math.min(1.0, Math.max(0.0, (x - z + 450) / 350.0));
+    // 5. Urban Plain (Cheolsan, Haan, Soha, Iljik)
+    const basePlain = 6.0 + Math.sin(x * 0.01) * Math.cos(z * 0.008) * 1.5;
 
-    // Combine elevation
-    let elevation = (plateaus + mountains) * coastDrop;
+    // Composite Elevation
+    let elevation = basePlain + Math.max(0.0, dodeokElevation) + Math.max(0.0, gureumElevation) + Math.max(0.0, gahakElevation);
 
-    // Carve river channel
-    elevation -= riverCarve * 14.0;
+    // Carve Anyangcheon Riverbed down to water level
+    if (distToRiver < 32.0) {
+      const smoothDrop = Math.cos((distToRiver / 32.0) * Math.PI) * 0.5 + 0.5;
+      elevation = elevation * (1.0 - smoothDrop) + (2.0 * smoothDrop);
+    }
 
-    return Math.max(1.5, elevation);
+    return Math.max(1.8, elevation);
   }
 
   /**
    * Generates high-density terrain mesh with slope-based PBR vertex shading & rock normals
    */
-  generateTerrainMesh(size = 900, resolution = 180) {
+  generateTerrainMesh(size = 900, resolution = 140) {
     const geometry = new THREE.PlaneGeometry(size, size, resolution, resolution);
     geometry.rotateX(-Math.PI / 2);
 
@@ -70,10 +78,10 @@ export class TerrainModule {
     const colors = [];
     const color = new THREE.Color();
 
-    const grassColor = new THREE.Color(0x3e612c);
+    const grassColor = new THREE.Color(0x3e662c);
     const dryGrassColor = new THREE.Color(0x566d3a);
-    const rockColor = new THREE.Color(0x3e4247);
-    const sandColor = new THREE.Color(0xa89f7e);
+    const rockColor = new THREE.Color(0x42464b);
+    const riverSandColor = new THREE.Color(0x8a846c);
     const cliffDarkColor = new THREE.Color(0x272b30);
 
     for (let i = 0; i < pos.count; i++) {
@@ -88,21 +96,21 @@ export class TerrainModule {
       const dy_dz = (this.calculateElevation(x, z + eps) - this.calculateElevation(x, z - eps)) / (2 * eps);
       const slope = Math.sqrt(dy_dx * dy_dx + dy_dz * dy_dz);
 
-      // Smooth hermite beach sand transition: 3.5m to 5.2m
-      const beachBlend = Math.max(0, Math.min(1.0, (y - 3.6) / 1.4));
+      // River bank transition: y < 3.8m
+      const riverBlend = Math.max(0, Math.min(1.0, (y - 2.5) / 1.5));
 
-      if (beachBlend < 1.0) {
-        // Coastal sand smoothly transitioning to grass
-        color.copy(sandColor).lerp(grassColor, beachBlend);
-      } else if (slope > 0.58) {
-        // Steep cliff: rock strata
-        color.copy(rockColor).lerp(cliffDarkColor, Math.min(1.0, (slope - 0.58) * 1.8));
-      } else if (slope > 0.32) {
-        // Moderate hillside: mixed grass/rock
-        const blend = (slope - 0.32) / 0.26;
+      if (riverBlend < 1.0) {
+        // Anyangcheon riverside soil & pebble promenade
+        color.copy(riverSandColor).lerp(grassColor, riverBlend);
+      } else if (slope > 0.60) {
+        // Steep mountain rock faces (Dodeoksan & Gureumsan crags)
+        color.copy(rockColor).lerp(cliffDarkColor, Math.min(1.0, (slope - 0.60) * 1.8));
+      } else if (slope > 0.35) {
+        // Forested mountain slopes
+        const blend = (slope - 0.35) / 0.25;
         color.copy(dryGrassColor).lerp(rockColor, blend);
       } else {
-        // Flat ground: lush grass with organic soil modulation
+        // Urban plains: lush grass with organic soil modulation
         const noise = (Math.sin(x * 0.04) * Math.cos(z * 0.04) + 1.0) * 0.5;
         color.copy(grassColor).lerp(dryGrassColor, noise * 0.35);
       }
@@ -116,53 +124,44 @@ export class TerrainModule {
     const material = new THREE.MeshStandardMaterial({
       vertexColors: true,
       roughness: 0.88,
-      metalness: 0.04,
+      metalness: 0.05,
       flatShading: false
     });
 
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.receiveShadow = true;
-    mesh.castShadow = false;
-    return mesh;
+    this.terrainMesh = new THREE.Mesh(geometry, material);
+    this.terrainMesh.name = 'GwangmyeongTerrain';
+    this.terrainMesh.receiveShadow = true;
+    return this.terrainMesh;
   }
 
   /**
-   * Generates realistic specular water surface with deep coastal tone
+   * Generates Anyangcheon specular water surface mesh
    */
-  generateWaterMesh(size = 1100) {
-    const geometry = new THREE.PlaneGeometry(size, size, 64, 64);
+  generateWaterMesh(size = 900) {
+    const geometry = new THREE.PlaneGeometry(size, size, 48, 48);
     geometry.rotateX(-Math.PI / 2);
 
-    this.waterMaterial = new THREE.MeshStandardMaterial({
-      color: 0x0c2a3b,
+    const material = new THREE.MeshStandardMaterial({
+      color: 0x1a3a48,
       roughness: 0.12,
-      metalness: 0.75,
+      metalness: 0.85,
       transparent: true,
-      opacity: 0.86
+      opacity: 0.88
     });
 
-    const mesh = new THREE.Mesh(geometry, this.waterMaterial);
-    mesh.position.y = 4.0; // Water table level
-    mesh.receiveShadow = true;
-    return mesh;
-  }
-
-  update(delta) {
-    this.time += delta;
-    if (this.waterMesh) {
-      // Gentle water swell
-      this.waterMesh.position.y = 4.0 + Math.sin(this.time * 0.9) * 0.08;
-    }
+    this.waterMesh = new THREE.Mesh(geometry, material);
+    this.waterMesh.name = 'AnyangcheonWaterPlane';
+    this.waterMesh.position.y = 3.2; // Calibrated Anyangcheon water level
+    this.waterMesh.receiveShadow = true;
+    return this.waterMesh;
   }
 
   showcase(stageGroup, options = {}) {
-    this.terrainMesh = this.generateTerrainMesh(900, 160);
-    this.waterMesh = this.generateWaterMesh(950);
-
-    stageGroup.add(this.terrainMesh);
-    stageGroup.add(this.waterMesh);
-
-    console.log('[TerrainModule] Showcase scene generated successfully.');
+    const terrain = this.generateTerrainMesh(700, 120);
+    const water = this.generateWaterMesh(700);
+    stageGroup.add(terrain);
+    stageGroup.add(water);
+    console.log('[TerrainModule] Gwangmyeong-si terrain showcase initialized.');
   }
 
   dispose() {

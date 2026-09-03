@@ -206,6 +206,182 @@ export class BuildingsModule {
     return group;
   }
 
+  /**
+   * Generates a Korean High-Rise Apartment Slab Block (판상형 주공/현대 아파트 단지)
+   * With stenciled gable building numbers (e.g. 101, 203), balcony bays, rooftop elevator crowns
+   */
+  createKoreanApartmentBlock(x, z, stories = 18, length = 56, depth = 14, rotY = 0, buildingNum = '101') {
+    const group = new THREE.Group();
+    const y = this.world ? this.world.terrain.getHeightAt(x, z) : 0;
+    group.position.set(x, y, z);
+    group.rotation.y = rotY;
+
+    const height = stories * 2.8;
+    const facadeMat = this.engine.assets.getKoreanApartmentFacadeMaterial();
+    const gableMat = this.engine.assets.getKoreanApartmentGableMaterial(buildingNum);
+    const concreteMat = this.engine.assets.getConcreteMaterial();
+
+    // Box multi-materials: [+X, -X, +Y, -Y, +Z, -Z]
+    const materials = [
+      gableMat,    // +X Right gable
+      gableMat,    // -X Left gable
+      concreteMat, // +Y Roof
+      concreteMat, // -Y Base
+      facadeMat,   // +Z Front balcony facade
+      facadeMat    // -Z Back balcony facade
+    ];
+
+    const bodyGeo = new THREE.BoxGeometry(length, height, depth);
+    const body = new THREE.Mesh(bodyGeo, materials);
+    body.position.y = height * 0.5;
+    body.castShadow = true;
+    body.receiveShadow = true;
+    group.add(body);
+
+    // 2-3 Rooftop Elevator / Stair Machine Towers
+    const towerH = 4.2;
+    const towerW = 6.0;
+    const towerD = 5.5;
+    const numCores = Math.max(2, Math.floor(length / 22));
+    const step = length / (numCores + 1);
+
+    for (let i = 1; i <= numCores; i++) {
+      const tx = -length * 0.5 + i * step;
+      const coreGeo = new THREE.BoxGeometry(towerW, towerH, towerD);
+      const core = new THREE.Mesh(coreGeo, concreteMat);
+      core.position.set(tx, height + towerH * 0.5, 0);
+      core.castShadow = true;
+      group.add(core);
+
+      // Red LED aviation obstruction light on top of each machine room
+      const beaconGeo = new THREE.SphereGeometry(0.3, 6, 6);
+      const beaconMat = new THREE.MeshBasicMaterial({ color: 0xff1500 });
+      const beacon = new THREE.Mesh(beaconGeo, beaconMat);
+      beacon.position.set(tx, height + towerH + 0.4, 0);
+      group.add(beacon);
+    }
+
+    // Ground entrance canopies
+    for (let i = 1; i <= numCores; i++) {
+      const tx = -length * 0.5 + i * step;
+      const canopyGeo = new THREE.BoxGeometry(4.5, 0.4, 3.2);
+      const canopy = new THREE.Mesh(canopyGeo, concreteMat);
+      canopy.position.set(tx, 3.2, depth * 0.5 + 1.6);
+      group.add(canopy);
+    }
+
+    this.registerBuilding(group, 'k_apartment', 'residential', stories * 8);
+    return group;
+  }
+
+  /**
+   * Generates the iconic KTX Gwangmyeong Station Mega-Terminal
+   * Grand barrel-vaulted glass-and-steel space truss canopy, sunken high-speed tracks & concourses
+   */
+  createKTXStationTerminal(x, z, length = 130, width = 52, height = 24, rotY = 0) {
+    const group = new THREE.Group();
+    const y = this.world ? this.world.terrain.getHeightAt(x, z) : 0;
+    group.position.set(x, y, z);
+    group.rotation.y = rotY;
+
+    const canopyMat = this.engine.assets.getKTXCanopyMaterial();
+    const concreteMat = this.engine.assets.getConcreteMaterial();
+
+    // 1. Grand Arched Barrel-Vault Glass Canopy
+    const radius = width * 0.52;
+    const vaultGeo = new THREE.CylinderGeometry(radius, radius, length, 28, 1, true, 0, Math.PI);
+    vaultGeo.rotateZ(Math.PI / 2);
+    vaultGeo.rotateY(Math.PI / 2);
+    const vault = new THREE.Mesh(vaultGeo, canopyMat);
+    vault.position.y = 8.0;
+    vault.castShadow = true;
+    vault.receiveShadow = true;
+    group.add(vault);
+
+    // Arch end glass walls
+    const endGeo = new THREE.CircleGeometry(radius, 24, 0, Math.PI);
+    endGeo.rotateY(Math.PI);
+    const endNorth = new THREE.Mesh(endGeo, canopyMat);
+    endNorth.position.set(0, 8.0, length * 0.5);
+    group.add(endNorth);
+
+    const endSouth = new THREE.Mesh(endGeo, canopyMat);
+    endSouth.position.set(0, 8.0, -length * 0.5);
+    group.add(endSouth);
+
+    // 2. Concrete Passenger Side Concourses (East and West Terminal Wings)
+    const concourseW = 10.0;
+    const concourseH = 9.0;
+    for (const side of [-1, 1]) {
+      const concourseGeo = new THREE.BoxGeometry(concourseW, concourseH, length);
+      const concourse = new THREE.Mesh(concourseGeo, concreteMat);
+      concourse.position.set(side * (width * 0.5 + concourseW * 0.5), concourseH * 0.5, 0);
+      concourse.castShadow = true;
+      concourse.receiveShadow = true;
+      group.add(concourse);
+    }
+
+    // 3. Central Railway Tracks & Platform Deck
+    const platformGeo = new THREE.BoxGeometry(width, 1.2, length + 20);
+    const platformMat = new THREE.MeshStandardMaterial({ color: 0x22262b, roughness: 0.9 });
+    const platform = new THREE.Mesh(platformGeo, platformMat);
+    platform.position.y = 0.6;
+    group.add(platform);
+
+    // KTX Steel Rail tracks (4 tracks: 2 express, 2 stopping)
+    const railMat = new THREE.MeshStandardMaterial({ color: 0x8f969d, metalness: 0.9, roughness: 0.2 });
+    for (const trackX of [-12, -4, 4, 12]) {
+      for (const railOff of [-0.75, 0.75]) {
+        const railGeo = new THREE.BoxGeometry(0.12, 0.25, length + 30);
+        const rail = new THREE.Mesh(railGeo, railMat);
+        rail.position.set(trackX + railOff, 1.35, 0);
+        group.add(rail);
+      }
+    }
+
+    this.registerBuilding(group, 'ktx_terminal', 'commercial', 1200);
+    return group;
+  }
+
+  /**
+   * Generates Kia AutoLand Gwangmyeong (Sohari Plant) Manufacturing Plant
+   */
+  createKiaIndustrialPlant(x, z, length = 90, width = 50, height = 14, rotY = 0) {
+    const group = new THREE.Group();
+    const y = this.world ? this.world.terrain.getHeightAt(x, z) : 0;
+    group.position.set(x, y, z);
+    group.rotation.y = rotY;
+
+    const sidingMat = this.engine.assets.getKiaFactorySidingMaterial();
+    const concreteMat = this.engine.assets.getConcreteMaterial();
+
+    // Main assembly shed
+    const mainGeo = new THREE.BoxGeometry(length, height, width);
+    const main = new THREE.Mesh(mainGeo, sidingMat);
+    main.position.y = height * 0.5;
+    main.castShadow = true;
+    main.receiveShadow = true;
+    group.add(main);
+
+    // Rooftop Sawtooth Skylights
+    const sawGeo = new THREE.BoxGeometry(length * 0.85, 2.5, 6.0);
+    for (let dz = -width * 0.35; dz <= width * 0.35; dz += 10.0) {
+      const saw = new THREE.Mesh(sawGeo, concreteMat);
+      saw.position.set(0, height + 1.25, dz);
+      group.add(saw);
+    }
+
+    // Kia Logo Billboard Frame on Front
+    const signGeo = new THREE.BoxGeometry(18, 4.5, 0.5);
+    const signMat = new THREE.MeshStandardMaterial({ color: 0x05070a, metalness: 0.8 });
+    const sign = new THREE.Mesh(signGeo, signMat);
+    sign.position.set(0, height + 3.0, width * 0.5 + 0.2);
+    group.add(sign);
+
+    this.registerBuilding(group, 'kia_plant', 'industrial', 850);
+    return group;
+  }
+
   registerBuilding(meshGroup, type, zoneType, occupants) {
     const id = `bld_${++this.buildingIdCounter}`;
     meshGroup.name = id;

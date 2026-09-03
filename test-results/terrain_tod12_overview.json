@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-09-03T04:29:12.045Z",
+  "timestamp": "2026-09-03T04:48:54.300Z",
   "showcase": "terrain",
   "tod": 12,
   "preset": "overview",
   "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\terrain_tod12_overview.png",
   "metrics": {
-    "fps": 143,
+    "fps": 135,
     "drawCalls": 1,
     "triangles": 1,
     "textures": 14,

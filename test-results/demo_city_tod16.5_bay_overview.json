@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-09-03T05:14:13.061Z",
+  "timestamp": "2026-09-03T05:58:18.341Z",
   "showcase": "demo_city",
   "tod": 16.5,
   "preset": "bay_overview",
   "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\demo_city_tod16.5_bay_overview.png",
   "metrics": {
-    "fps": 79,
+    "fps": 36,
     "drawCalls": 1,
     "triangles": 1,
-    "textures": 45,
-    "geometries": 773,
+    "textures": 60,
+    "geometries": 783,
     "errors": []
   },
   "consoleErrors": [],

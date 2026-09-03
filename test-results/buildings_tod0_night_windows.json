@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-09-03T05:13:59.960Z",
+  "timestamp": "2026-09-03T05:58:03.187Z",
   "showcase": "buildings",
   "tod": 0,
   "preset": "night_windows",
   "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\buildings_tod0_night_windows.png",
   "metrics": {
-    "fps": 142,
+    "fps": 143,
     "drawCalls": 1,
     "triangles": 1,
     "textures": 23,

@@ -58,6 +58,9 @@ export class CameraController {
       anyangcheon_bridge: { target: [150, 10, -65], radius: 140, theta: 2.2, phi: 1.15 },
       ikea_costco: { target: [-20, 16, 195], radius: 170, theta: 2.2, phi: 1.08 },
       gwangmyeong_cave: { target: [-25, 34, 145], radius: 60, theta: 2.3, phi: 1.12 },
+      gwangmyeong_city_hall: { target: [25, 18, -45], radius: 95, theta: 2.1, phi: 1.1 },
+      gwangmyeong_market: { target: [-45, 12, -195], radius: 90, theta: 1.9, phi: 1.12 },
+      gis_overview: { target: [10, 20, 0], radius: 380, theta: 3.5, phi: 1.05 },
       gureumsan_overview: { target: [20, 20, 0], radius: 320, theta: 3.6, phi: 1.12 }
     };
 

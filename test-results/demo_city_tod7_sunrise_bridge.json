@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-09-03T05:14:19.940Z",
+  "timestamp": "2026-09-03T05:58:25.535Z",
   "showcase": "demo_city",
   "tod": 7,
   "preset": "sunrise_bridge",
   "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\demo_city_tod7_sunrise_bridge.png",
   "metrics": {
-    "fps": 71,
+    "fps": 50,
     "drawCalls": 1,
     "triangles": 1,
-    "textures": 45,
-    "geometries": 729,
+    "textures": 59,
+    "geometries": 736,
     "errors": []
   },
   "consoleErrors": [],

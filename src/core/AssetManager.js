@@ -710,4 +710,173 @@ export class AssetManager {
     this.materials.set('cave_portal', material);
     return material;
   }
+
+  /**
+   * 14. Gwangmyeong City Hall (광명시청) Material
+   */
+  getCityHallMaterial() {
+    if (this.materials.has('city_hall')) return this.materials.get('city_hall');
+    const size = 512;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = '#dcdde1';
+    ctx.fillRect(0, 0, size, size);
+
+    ctx.fillStyle = '#1e3a8a';
+    ctx.fillRect(0, 0, size, size * 0.24);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 30px "Malgun Gothic", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('🏛️ 광명시청', size * 0.5, size * 0.11);
+    ctx.font = '16px sans-serif';
+    ctx.fillText('GWANGMYEONG CITY HALL', size * 0.5, size * 0.18);
+
+    ctx.fillStyle = '#60a5fa';
+    for (let r = 0; r < 4; r++) {
+      for (let c = 0; c < 6; c++) {
+        ctx.fillRect(size * 0.1 + c * size * 0.14, size * 0.32 + r * size * 0.15, size * 0.08, size * 0.09);
+      }
+    }
+
+    const texture = this._createCanvasTexture(canvas, false, 1, 1);
+    const material = new THREE.MeshStandardMaterial({
+      map: texture,
+      roughness: 0.5,
+      metalness: 0.1
+    });
+    this.materials.set('city_hall', material);
+    return material;
+  }
+
+  /**
+   * 15. Lotte Mall Gwangmyeong (롯데몰 광명점) Material
+   */
+  getLotteMallMaterial() {
+    if (this.materials.has('lotte_mall')) return this.materials.get('lotte_mall');
+    const size = 512;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = '#f8fafc';
+    ctx.fillRect(0, 0, size, size);
+
+    ctx.fillStyle = '#dc2626';
+    ctx.fillRect(0, size * 0.1, size, size * 0.28);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 38px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('LOTTE MALL', size * 0.5, size * 0.23);
+    ctx.font = 'bold 20px "Malgun Gothic", sans-serif';
+    ctx.fillText('롯데몰 광명점', size * 0.5, size * 0.32);
+
+    const texture = this._createCanvasTexture(canvas, false, 1, 1);
+    const material = new THREE.MeshStandardMaterial({
+      map: texture,
+      roughness: 0.4,
+      metalness: 0.1
+    });
+    this.materials.set('lotte_mall', material);
+    return material;
+  }
+
+  /**
+   * 16. Gwangmyeong Traditional Market (광명전통시장) Material
+   */
+  getMarketMaterial() {
+    if (this.materials.has('market_facade')) return this.materials.get('market_facade');
+    const size = 512;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = '#334155';
+    ctx.fillRect(0, 0, size, size);
+
+    ctx.fillStyle = '#ea580c';
+    ctx.fillRect(0, 0, size, size * 0.32);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 32px "Malgun Gothic", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('🏮 광명전통시장', size * 0.5, size * 0.16);
+    ctx.font = '16px sans-serif';
+    ctx.fillText('GWANGMYEONG MARKET', size * 0.5, size * 0.25);
+
+    const texture = this._createCanvasTexture(canvas, false, 1, 1);
+    const material = new THREE.MeshStandardMaterial({
+      map: texture,
+      roughness: 0.7,
+      metalness: 0.05
+    });
+    this.materials.set('market_facade', material);
+    return material;
+  }
+
+  /**
+   * 17. 3D Floating Administrative GIS Marker Sprite
+   */
+  createLabelSprite(text, subtext = '', tagColor = '#38bdf8', scale = 18) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 128;
+    const ctx = canvas.getContext('2d');
+
+    const r = 24;
+    const x = 16, y = 16, w = 480, h = 96;
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+
+    ctx.fillStyle = 'rgba(10, 16, 28, 0.88)';
+    ctx.fill();
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = tagColor;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(x + 36, y + h * 0.5, 12, 0, Math.PI * 2);
+    ctx.fillStyle = tagColor;
+    ctx.fill();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 34px "Malgun Gothic", sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    if (subtext) {
+      ctx.fillText(text, x + 64, y + 36);
+      ctx.fillStyle = tagColor;
+      ctx.font = 'bold 22px sans-serif';
+      ctx.fillText(subtext, x + 64, y + 70);
+    } else {
+      ctx.fillText(text, x + 64, y + h * 0.5);
+    }
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.minFilter = THREE.LinearFilter;
+    const material = new THREE.SpriteMaterial({
+      map: texture,
+      depthTest: false,
+      transparent: true
+    });
+
+    const sprite = new THREE.Sprite(material);
+    sprite.scale.set(scale * 2.6, scale * 0.65, 1.0);
+    return sprite;
+  }
 }

@@ -208,7 +208,7 @@ export class DemoCityModule {
     bld.init(this.world, this.engine);
     this.submodules.bld = bld;
 
-    // --- District 1: 광명동 (1970년대 이전 취락) ---
+    // --- District 1: 광명동 (1970년대 이전 취락 & 전통시장) ---
     const gwangmyeongHouses = new THREE.Group();
     for (let r = 0; r < 2; r++) {
       for (let c = 0; c < 4; c++) {
@@ -217,14 +217,19 @@ export class DemoCityModule {
         gwangmyeongHouses.add(bld.createSuburbanHouse(hx, hz, 1.0));
       }
     }
-    stageGroup.add(this.registerTimelineObject(gwangmyeongHouses, 1970, '광명동 주택지'));
+    const market = bld.createTraditionalMarket(-45, -195, 0);
+    gwangmyeongHouses.add(market);
+    stageGroup.add(this.registerTimelineObject(gwangmyeongHouses, 1970, '광명동 주택지 & 전통시장'));
 
     // --- District 2: 소하동 기아 오토랜드 광명공장 (1973년 준공) ---
     const kiaPlant = bld.createKiaIndustrialPlant(75, 95, 85, 45, 14, 0);
     stageGroup.add(this.registerTimelineObject(kiaPlant, 1973, '기아 오토랜드 소하리 공장'));
 
-    // --- District 3: 철산동 철산주공 아파트 단지 (1985년 준공) ---
+    // --- District 3: 철산동 행정 중심 & 철산주공 아파트 단지 (1981 광명시청 / 1985 아파트 준공) ---
     const cheolsanAptGroup = new THREE.Group();
+    const cityHall = bld.createCityHall(25, -45, 0);
+    cheolsanAptGroup.add(cityHall);
+
     const cheolsanApts = [
       { x: -15, z: -105, stories: 20, num: '101' },
       { x: 50,  z: -105, stories: 22, num: '102' },
@@ -237,9 +242,9 @@ export class DemoCityModule {
       cheolsanAptGroup.add(bld.createKoreanApartmentBlock(apt.x, apt.z, apt.stories, 56, 14, 0, apt.num));
     }
     // 철산역 상업지구 상가
-    cheolsanAptGroup.add(bld.createSkyscraper(50, -45, 65, 'cyan'));
-    cheolsanAptGroup.add(bld.createSkyscraper(85, -45, 75, 'blue'));
-    stageGroup.add(this.registerTimelineObject(cheolsanAptGroup, 1985, '철산주공 아파트 단지'));
+    cheolsanAptGroup.add(bld.createSkyscraper(55, -45, 65, 'cyan'));
+    cheolsanAptGroup.add(bld.createSkyscraper(90, -45, 75, 'blue'));
+    stageGroup.add(this.registerTimelineObject(cheolsanAptGroup, 1985, '철산주공 & 광명시청'));
 
     // --- District 4: 하안동 하안주공 아파트 대단지 (1989년 준공) ---
     const haanAptGroup = new THREE.Group();
@@ -266,13 +271,19 @@ export class DemoCityModule {
     const costcoStore = bld.createCostcoStore(-45, 215, 68, 42, 14, 0);
     stageGroup.add(this.registerTimelineObject(costcoStore, 2012, '코스트코 광명점'));
 
-    // --- District 7: 이케아 광명점 (2014년 개점) ---
+    // --- District 7: 이케아 & 롯데몰 광명점 (2014 / 2020년 개점) ---
     const ikeaStore = bld.createIKEAStore(-45, 175, 80, 45, 18, 0);
     stageGroup.add(this.registerTimelineObject(ikeaStore, 2014, '이케아 광명점'));
 
-    // --- District 8: 가학산 광명동굴 테마파크 정식 개관 (2015년 개관) ---
+    const lotteMall = bld.createLotteMall(-45, 130, 72, 44, 24, 0);
+    stageGroup.add(this.registerTimelineObject(lotteMall, 2020, '롯데몰 광명점'));
+
+    // --- District 8: 가학산 광명동굴 테마파크 & 자원회수시설 굴뚝 (2015년 개관) ---
     const caveEntrance = bld.createGwangmyeongCaveEntrance(-25, 145, Math.PI * 0.5);
-    stageGroup.add(this.registerTimelineObject(caveEntrance, 2015, '광명동굴 테마파크'));
+    const incinerator = bld.createIncinerationTower(-55, 125);
+    const caveGroup = new THREE.Group();
+    caveGroup.add(caveEntrance, incinerator);
+    stageGroup.add(this.registerTimelineObject(caveGroup, 2015, '광명동굴 테마파크 & 자원회수시설'));
 
     // --- District 9: 유플래닛 & 어반브릭스 40층 초고층 복합타워 (2021년 준공) ---
     const uPlanetGroup = new THREE.Group();
@@ -281,7 +292,45 @@ export class DemoCityModule {
     uPlanetGroup.add(bld.createSkyscraper(95, 175, 110, 'emerald'));// Gwangmyeong Tech Complex
     stageGroup.add(this.registerTimelineObject(uPlanetGroup, 2021, '유플래닛 & 어반브릭스'));
 
-    // 5. Urban Props (Trees, Streetlamps)
+    // 5. 3D GIS Administrative Labels Layer (공식 행정구역 & 랜드마크 3D 빌보드 라벨)
+    this.labelsGroup = new THREE.Group();
+    const assets = this.engine.assets;
+
+    const labelDefs = [
+      // 5개 행정동
+      { text: '광명동 (Gwangmyeong-dong)', sub: '목감천변 주거지 · 광명전통시장', color: '#38bdf8', pos: [-65, 24, -195] },
+      { text: '철산동 (Cheolsan-dong)', sub: '광명시청 · 철산주공 대단지', color: '#38bdf8', pos: [45, 28, -85] },
+      { text: '하안동 (Haan-dong)', sub: '하안주공 1~12단지 · 범안로', color: '#38bdf8', pos: [55, 28, 0] },
+      { text: '소하동 (Soha-dong)', sub: '기아 오토랜드 광명공장 · 소하택지', color: '#38bdf8', pos: [65, 25, 95] },
+      { text: '일직동 (Iljik-dong)', sub: 'KTX 광명역세권 · 유플래닛', color: '#38bdf8', pos: [15, 34, 175] },
+      // 4대 산
+      { text: '⛰️ 도덕산 (183m)', sub: 'Y자형 출렁다리 · 인공폭포', color: '#4ade80', pos: [-25, 52, -145] },
+      { text: '⛰️ 구름산 (240m)', sub: '광명시 최고봉 · 산림욕장', color: '#4ade80', pos: [-55, 75, 15] },
+      { text: '⛰️ 가학산 (220m)', sub: '광명동굴 테마파크', color: '#4ade80', pos: [-35, 52, 145] },
+      { text: '⛰️ 서독산 (180m)', sub: 'KTX 역사 남단 병풍능선', color: '#4ade80', pos: [-25, 56, 230] },
+      // 주요 수계 및 교량
+      { text: '🌊 안양천 (Anyangcheon)', sub: '서울 금천구·구로구 동쪽 시계 경계', color: '#60a5fa', pos: [145, 16, 0] },
+      { text: '🌊 목감천 (Mokgamcheon)', sub: '서울 개봉동/시흥 서북쪽 시계 경계', color: '#60a5fa', pos: [-85, 16, -200] },
+      { text: '🌉 철산교 (Cheolsan Br.)', sub: '서울 가산디지털단지 연결', color: '#fbbf24', pos: [165, 16, -65] },
+      // 쇼핑 & 시정
+      { text: '🛍️ 이케아 · 코스트코 · 롯데몰', sub: '일직동 글로벌 복합 쇼핑 허브', color: '#facc15', pos: [-45, 32, 185] },
+      { text: '🏛️ 광명시청 (City Hall)', sub: '철산동 시민광장 행정복합타운', color: '#38bdf8', pos: [25, 32, -45] }
+    ];
+
+    for (const def of labelDefs) {
+      const sprite = assets.createLabelSprite(def.text, def.sub, def.color, 16);
+      sprite.position.set(def.pos[0], def.pos[1], def.pos[2]);
+      this.labelsGroup.add(sprite);
+    }
+    stageGroup.add(this.labelsGroup);
+
+    if (this.world && this.world.eventBus) {
+      this.world.eventBus.on('labels:toggle', (data) => {
+        this.labelsGroup.visible = data.visible;
+      });
+    }
+
+    // 6. Urban Props (Trees, Streetlamps)
     for (let z = -220; z <= 220; z += 20) {
       props.spawnTree(117, z, 1.1);
       props.spawnTree(133, z, 1.1);
@@ -300,7 +349,7 @@ export class DemoCityModule {
       props.spawnTree(pt.x, pt.z, 1.35);
     }
 
-    // 6. Traffic Simulation
+    // 7. Traffic Simulation
     const traffic = new TrafficModule();
     traffic.init(this.world, this.engine);
     this.submodules.traffic = traffic;
@@ -322,6 +371,12 @@ export class DemoCityModule {
     ]);
     traffic.spawnVehicle(oriRoCurve, 15.5, 0.15, 2.2, true);
     traffic.spawnVehicle(oriRoCurve, 17.0, 0.55, -2.2, false);
+
+    // 8. Mount Full Interactive HUD UI Module!
+    const ui = new UIModule();
+    ui.init(this.world, this.engine);
+    this.submodules.ui = ui;
+    this.engine.registerModule('ui', ui);
 
     // Initial Year from URL (e.g. ?year=1985)
     const urlParams = new URLSearchParams(window.location.search);

@@ -498,6 +498,113 @@ export class BuildingsModule {
     return group;
   }
 
+  /**
+   * 9. Gwangmyeong City Hall (광명시청)
+   */
+  createCityHall(x, z, rotation = 0) {
+    const group = new THREE.Group();
+    const terrainY = this.world && this.world.terrain ? this.world.terrain.getHeightAt(x, z) : 6.0;
+    group.position.set(x, terrainY, z);
+    group.rotation.y = rotation;
+
+    const cityHallMat = this.engine.assets.getCityHallMaterial();
+    const bldGeo = new THREE.BoxGeometry(36, 22, 22);
+    const bld = new THREE.Mesh(bldGeo, cityHallMat);
+    bld.position.set(0, 11, 0);
+    bld.castShadow = true;
+    bld.receiveShadow = true;
+    group.add(bld);
+
+    // Clock tower on roof
+    const towerGeo = new THREE.BoxGeometry(10, 8, 10);
+    const towerMat = new THREE.MeshStandardMaterial({ color: 0x1e3a8a, metalness: 0.2 });
+    const tower = new THREE.Mesh(towerGeo, towerMat);
+    tower.position.set(0, 26, 0);
+    group.add(tower);
+
+    // Flagpole
+    const poleGeo = new THREE.CylinderGeometry(0.12, 0.12, 10);
+    const poleMat = new THREE.MeshStandardMaterial({ color: 0xd1d5db, metalness: 0.9 });
+    const pole = new THREE.Mesh(poleGeo, poleMat);
+    pole.position.set(12, 5, 14);
+    group.add(pole);
+
+    this.registerBuilding(group, 'gwangmyeong_city_hall', 'commercial', 800);
+    return group;
+  }
+
+  /**
+   * 10. Lotte Mall Gwangmyeong (롯데몰 광명점)
+   */
+  createLotteMall(x, z, width = 72, length = 44, height = 24, rotation = 0) {
+    const group = new THREE.Group();
+    const terrainY = this.world && this.world.terrain ? this.world.terrain.getHeightAt(x, z) : 6.0;
+    group.position.set(x, terrainY, z);
+    group.rotation.y = rotation;
+
+    const mallMat = this.engine.assets.getLotteMallMaterial();
+    const mallGeo = new THREE.BoxGeometry(width, height, length);
+    const mall = new THREE.Mesh(mallGeo, mallMat);
+    mall.position.set(0, height * 0.5, 0);
+    mall.castShadow = true;
+    mall.receiveShadow = true;
+    group.add(mall);
+
+    this.registerBuilding(group, 'lotte_mall', 'commercial', 1200);
+    return group;
+  }
+
+  /**
+   * 11. Gwangmyeong Traditional Market (광명전통시장)
+   */
+  createTraditionalMarket(x, z, rotation = 0) {
+    const group = new THREE.Group();
+    const terrainY = this.world && this.world.terrain ? this.world.terrain.getHeightAt(x, z) : 6.0;
+    group.position.set(x, terrainY, z);
+    group.rotation.y = rotation;
+
+    const marketMat = this.engine.assets.getMarketMaterial();
+    const arcadeGeo = new THREE.BoxGeometry(42, 8, 18);
+    const arcade = new THREE.Mesh(arcadeGeo, marketMat);
+    arcade.position.set(0, 4, 0);
+    arcade.castShadow = true;
+    arcade.receiveShadow = true;
+    group.add(arcade);
+
+    this.registerBuilding(group, 'gwangmyeong_market', 'commercial', 450);
+    return group;
+  }
+
+  /**
+   * 12. Gwangmyeong Resource Recovery Incinerator Stack (광명시 자원회수시설 굴뚝)
+   */
+  createIncinerationTower(x, z) {
+    const group = new THREE.Group();
+    const terrainY = this.world && this.world.terrain ? this.world.terrain.getHeightAt(x, z) : 6.0;
+    group.position.set(x, terrainY, z);
+
+    // Red and White striped tower
+    const stackHeight = 52;
+    const stackGeo = new THREE.CylinderGeometry(2.2, 3.0, stackHeight, 16);
+    const stackMat = new THREE.MeshStandardMaterial({ color: 0xef4444, metalness: 0.2 });
+    const stack = new THREE.Mesh(stackGeo, stackMat);
+    stack.position.set(0, stackHeight * 0.5, 0);
+    stack.castShadow = true;
+    group.add(stack);
+
+    // White stripes
+    for (let i = 1; i <= 3; i++) {
+      const stripeGeo = new THREE.CylinderGeometry(2.3, 2.5, 6, 16);
+      const stripeMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
+      const stripe = new THREE.Mesh(stripeGeo, stripeMat);
+      stripe.position.set(0, i * 12, 0);
+      group.add(stripe);
+    }
+
+    this.registerBuilding(group, 'incineration_tower', 'industrial', 100);
+    return group;
+  }
+
   registerBuilding(meshGroup, type, zoneType, occupants) {
     const id = `bld_${++this.buildingIdCounter}`;
     meshGroup.name = id;

@@ -15,7 +15,7 @@ export class UIModule {
     this.unsubTM = null;
     this.isMapOpen = false;
     this.labelsVisible = true;
-    this.isTimeMachineOpen = true;
+    this.isTimeMachineOpen = false;
     this.currentYear = 2026;
     this.currentWeather = 'clear';
     this.isTimeLapsePlaying = false;
@@ -373,9 +373,9 @@ export class UIModule {
           max-width: 900px;
           margin: 0 auto;
         ">
-          <!-- Sleek Bottom Historical Time Machine Bar -->
+          <!-- Sleek Bottom Historical Time Machine Bar (Closed by default) -->
           <div id="tm-dock-bar" style="
-            display: flex;
+            display: none;
             align-items: center;
             gap: 10px;
             background: rgba(11, 16, 25, 0.92);
@@ -485,7 +485,7 @@ export class UIModule {
               align-items: center;
               gap: 4px;
             ">
-              ⏳ 타임머신 <span id="tm-toggle-arrow">▾</span>
+              ⏳ 타임머신 <span id="tm-toggle-arrow">▴</span>
             </button>
             <div style="width: 1px; height: 16px; background: rgba(255,255,255,0.12); margin: 0 2px;"></div>
             <button class="skylines-tool-btn active" data-tool="inspect" style="background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px;">

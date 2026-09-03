@@ -591,4 +591,123 @@ export class AssetManager {
     this.materials.set('kia_factory', material);
     return material;
   }
+
+  /**
+   * 11. IKEA Gwangmyeong Store Facade Material (Blue with Bold Yellow IKEA Sign)
+   */
+  getIKEAMaterial() {
+    if (this.materials.has('ikea_facade')) return this.materials.get('ikea_facade');
+
+    const size = 512;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+
+    // IKEA Signature Royal Blue
+    ctx.fillStyle = '#0051ba';
+    ctx.fillRect(0, 0, size, size);
+
+    // Large Yellow Oval & IKEA Brand Letters
+    ctx.fillStyle = '#ffda1a';
+    ctx.beginPath();
+    ctx.ellipse(size * 0.5, size * 0.45, size * 0.38, size * 0.22, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#0051ba';
+    ctx.font = '900 96px Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('IKEA', size * 0.5, size * 0.45);
+
+    // Yellow entrance accent band
+    ctx.fillStyle = '#ffda1a';
+    ctx.fillRect(0, size * 0.88, size, size * 0.12);
+
+    const texture = this._createCanvasTexture(canvas, false, 1, 1);
+    const material = new THREE.MeshStandardMaterial({
+      map: texture,
+      roughness: 0.42,
+      metalness: 0.15
+    });
+
+    this.materials.set('ikea_facade', material);
+    return material;
+  }
+
+  /**
+   * 12. Costco Gwangmyeong Wholesale Warehouse Material
+   */
+  getCostcoMaterial() {
+    if (this.materials.has('costco_facade')) return this.materials.get('costco_facade');
+
+    const size = 512;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+
+    // Light concrete / industrial beige warehouse wall
+    ctx.fillStyle = '#d8d4cb';
+    ctx.fillRect(0, 0, size, size);
+
+    // Red Costco branding band
+    ctx.fillStyle = '#e31837';
+    ctx.fillRect(0, size * 0.28, size, size * 0.24);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 64px Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('COSTCO', size * 0.5, size * 0.40);
+
+    const texture = this._createCanvasTexture(canvas, false, 1, 1);
+    const material = new THREE.MeshStandardMaterial({
+      map: texture,
+      roughness: 0.55,
+      metalness: 0.10
+    });
+
+    this.materials.set('costco_facade', material);
+    return material;
+  }
+
+  /**
+   * 13. Gwangmyeong Cave (광명동굴) Mining Heritage Portal Material
+   */
+  getCavePortalMaterial() {
+    if (this.materials.has('cave_portal')) return this.materials.get('cave_portal');
+
+    const size = 256;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+
+    // Dark rustic rock strata
+    ctx.fillStyle = '#2b2926';
+    ctx.fillRect(0, 0, size, size);
+
+    // Heavy mining timber arch framing
+    ctx.fillStyle = '#523a22';
+    ctx.fillRect(size * 0.15, 0, size * 0.12, size);
+    ctx.fillRect(size * 0.73, 0, size * 0.12, size);
+    ctx.fillRect(0, size * 0.12, size, size * 0.15);
+
+    // Signage: 광명동굴
+    ctx.fillStyle = '#e8d8a7';
+    ctx.font = 'bold 24px "Malgun Gothic", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('광명동굴', size * 0.5, size * 0.23);
+
+    const texture = this._createCanvasTexture(canvas, false, 1, 1);
+    const material = new THREE.MeshStandardMaterial({
+      map: texture,
+      roughness: 0.90,
+      metalness: 0.05
+    });
+
+    this.materials.set('cave_portal', material);
+    return material;
+  }
 }

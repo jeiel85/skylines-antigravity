@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-09-03T04:49:43.648Z",
+  "timestamp": "2026-09-03T05:03:18.263Z",
   "showcase": "tools",
   "tod": 14,
   "preset": "road_preview",
   "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\tools_tod14_road_preview.png",
   "metrics": {
-    "fps": 144,
+    "fps": 142,
     "drawCalls": 1,
     "triangles": 1,
     "textures": 14,

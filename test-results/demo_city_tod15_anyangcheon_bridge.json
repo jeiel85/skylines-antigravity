@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-09-03T04:48:02.478Z",
+  "timestamp": "2026-09-03T05:02:05.845Z",
   "showcase": "demo_city",
   "tod": 15,
   "preset": "anyangcheon_bridge",
   "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\demo_city_tod15_anyangcheon_bridge.png",
   "metrics": {
-    "fps": 55,
+    "fps": 65,
     "drawCalls": 1,
     "triangles": 1,
-    "textures": 44,
-    "geometries": 630,
+    "textures": 45,
+    "geometries": 743,
     "errors": []
   },
   "consoleErrors": [],

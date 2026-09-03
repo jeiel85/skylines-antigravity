@@ -29,38 +29,59 @@ export class TerrainModule {
    * Topographic elevation model of Gwangmyeong-si
    */
   calculateElevation(x, z) {
-    // 1. Anyangcheon (안양천) River Channel along East (x ~ 140..170)
-    const riverMeander = Math.sin(z * 0.008) * 15.0;
-    const riverBedX = 145.0 + riverMeander;
-    const distToRiver = Math.abs(x - riverBedX);
-    const riverCarve = Math.max(0.0, 1.0 - distToRiver / 32.0);
+    // 1. Anyangcheon (안양천) River Channel along East Boundary (x ~ 140)
+    const riverMeander = Math.sin(z * 0.007) * 12.0;
+    const anyangcheonBedX = 140.0 + riverMeander;
+    const distAnyangcheon = Math.abs(x - anyangcheonBedX);
 
-    // 2. Dodeoksan (도덕산, North Mountain & Gorge, peak at x=-30, z=-170)
-    const distDodeok = Math.hypot(x - (-30), z - (-170));
-    const dodeokRidge = Math.max(0.0, 1.0 - distDodeok / 120.0);
-    const dodeokGorge = Math.exp(-Math.pow((x - (-25)) / 18.0, 2) - Math.pow((z - (-145)) / 22.0, 2)) * 14.0;
-    const dodeokElevation = (Math.pow(dodeokRidge, 1.8) * 48.0 - dodeokGorge);
+    // 2. Mokgamcheon (목감천) River Channel along North-West Boundary
+    // Meanders from South-West of Gwangmyeong-dong up to northern apex confluence with Anyangcheon
+    const mokgamBedX = -110.0 + (z + 240) * 0.65 + Math.sin(z * 0.015) * 8.0;
+    const isNorthWest = (z < -140 && x < 40);
+    const distMokgam = isNorthWest ? Math.abs(x - mokgamBedX) : 999.0;
 
-    // 3. Gureumsan (구름산, Central-West Mountain Ridge, peak at x=-55, z=20)
-    const distGureum = Math.hypot((x - (-55)) * 0.9, (z - 20) * 0.7);
+    // 3. The 4 Mountains of Gwangmyeong (광명 4대 산):
+    // Peak 1: 도덕산 (Dodeoksan, North, peak at x=-38, z=-160)
+    const distDodeok = Math.hypot(x - (-38), z - (-160));
+    const dodeokRidge = Math.max(0.0, 1.0 - distDodeok / 115.0);
+    const dodeokGorge = Math.exp(-Math.pow((x - (-25)) / 16.0, 2) - Math.pow((z - (-145)) / 18.0, 2)) * 14.0;
+    const dodeokElevation = Math.pow(dodeokRidge, 1.8) * 48.0 - dodeokGorge;
+
+    // Peak 2: 구름산 (Gureumsan, Central-West, peak at x=-55, z=15) - Highest peak in Gwangmyeong
+    const distGureum = Math.hypot((x - (-55)) * 0.9, (z - 15) * 0.7);
     const gureumRidge = Math.max(0.0, 1.0 - distGureum / 140.0);
     const gureumNoise = Math.sin(x * 0.03) * Math.cos(z * 0.03) * 3.5;
-    const gureumElevation = Math.pow(gureumRidge, 1.6) * 62.0 + (gureumRidge > 0.1 ? gureumNoise : 0);
+    const gureumElevation = Math.pow(gureumRidge, 1.6) * 65.0 + (gureumRidge > 0.1 ? gureumNoise : 0);
 
-    // 4. Gahaksan (가학산, South-West Mountain, peak at x=-65, z=220)
-    const distGahak = Math.hypot(x - (-65), z - 220);
-    const gahakRidge = Math.max(0.0, 1.0 - distGahak / 125.0);
-    const gahakElevation = Math.pow(gahakRidge, 1.7) * 52.0;
+    // Peak 3: 가학산 (Gahaksan, South-West, peak at x=-65, z=145, 광명동굴)
+    const distGahak = Math.hypot(x - (-65), z - 145);
+    const gahakRidge = Math.max(0.0, 1.0 - distGahak / 110.0);
+    const gahakElevation = Math.pow(gahakRidge, 1.7) * 56.0;
 
-    // 5. Urban Plain (Cheolsan, Haan, Soha, Iljik)
-    const basePlain = 6.0 + Math.sin(x * 0.01) * Math.cos(z * 0.008) * 1.5;
+    // Peak 4: 서독산 (Seodoksan, South, peak at x=-25, z=230)
+    const distSeodok = Math.hypot(x - (-25), z - 230);
+    const seodokRidge = Math.max(0.0, 1.0 - distSeodok / 105.0);
+    const seodokElevation = Math.pow(seodokRidge, 1.7) * 46.0;
+
+    // 4. Urban Plain Baseline (Cheolsan, Haan, Soha, Iljik)
+    const basePlain = 6.0 + Math.sin(x * 0.01) * Math.cos(z * 0.008) * 1.2;
 
     // Composite Elevation
-    let elevation = basePlain + Math.max(0.0, dodeokElevation) + Math.max(0.0, gureumElevation) + Math.max(0.0, gahakElevation);
+    let elevation = basePlain +
+      Math.max(0.0, dodeokElevation) +
+      Math.max(0.0, gureumElevation) +
+      Math.max(0.0, gahakElevation) +
+      Math.max(0.0, seodokElevation);
 
     // Carve Anyangcheon Riverbed down to water level
-    if (distToRiver < 32.0) {
-      const smoothDrop = Math.cos((distToRiver / 32.0) * Math.PI) * 0.5 + 0.5;
+    if (distAnyangcheon < 30.0) {
+      const smoothDrop = Math.cos((distAnyangcheon / 30.0) * Math.PI) * 0.5 + 0.5;
+      elevation = elevation * (1.0 - smoothDrop) + (2.0 * smoothDrop);
+    }
+
+    // Carve Mokgamcheon Riverbed
+    if (distMokgam < 22.0) {
+      const smoothDrop = Math.cos((distMokgam / 22.0) * Math.PI) * 0.5 + 0.5;
       elevation = elevation * (1.0 - smoothDrop) + (2.0 * smoothDrop);
     }
 

@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-09-03T04:48:57.296Z",
+  "timestamp": "2026-09-03T05:02:36.274Z",
   "showcase": "terrain",
   "tod": 17.5,
   "preset": "cliffs",
   "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\terrain_tod17.5_cliffs.png",
   "metrics": {
-    "fps": 129,
+    "fps": 137,
     "drawCalls": 1,
     "triangles": 1,
     "textures": 14,

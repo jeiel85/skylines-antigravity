@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-09-03T05:00:22.934Z",
+  "showcase": "demo_city",
+  "tod": 12,
+  "preset": "gwangmyeong_cave",
+  "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\demo_city_tod12_gwangmyeong_cave.png",
+  "metrics": {
+    "fps": 78,
+    "drawCalls": 1,
+    "triangles": 1,
+    "textures": 22,
+    "geometries": 566,
+    "errors": []
+  },
+  "consoleErrors": [],
+  "consoleWarnings": [],
+  "success": true
+}

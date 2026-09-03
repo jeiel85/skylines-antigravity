@@ -382,6 +382,122 @@ export class BuildingsModule {
     return group;
   }
 
+  /**
+   * Generates IKEA Gwangmyeong Flagship Store
+   */
+  createIKEAStore(x, z, length = 80, width = 45, height = 18, rotY = 0) {
+    const group = new THREE.Group();
+    const y = this.world ? this.world.terrain.getHeightAt(x, z) : 0;
+    group.position.set(x, y, z);
+    group.rotation.y = rotY;
+
+    const ikeaMat = this.engine.assets.getIKEAMaterial();
+    const concreteMat = this.engine.assets.getConcreteMaterial();
+
+    const bodyGeo = new THREE.BoxGeometry(length, height, width);
+    const body = new THREE.Mesh(bodyGeo, ikeaMat);
+    body.position.y = height * 0.5;
+    body.castShadow = true;
+    body.receiveShadow = true;
+    group.add(body);
+
+    // Rooftop Solar / HVAC units
+    for (let dx = -length * 0.3; dx <= length * 0.3; dx += 20) {
+      const hvacGeo = new THREE.BoxGeometry(8, 2.5, 8);
+      const hvac = new THREE.Mesh(hvacGeo, concreteMat);
+      hvac.position.set(dx, height + 1.25, 0);
+      group.add(hvac);
+    }
+
+    this.registerBuilding(group, 'ikea_store', 'commercial', 650);
+    return group;
+  }
+
+  /**
+   * Generates Costco Gwangmyeong Wholesale Warehouse Store
+   */
+  createCostcoStore(x, z, length = 68, width = 42, height = 14, rotY = 0) {
+    const group = new THREE.Group();
+    const y = this.world ? this.world.terrain.getHeightAt(x, z) : 0;
+    group.position.set(x, y, z);
+    group.rotation.y = rotY;
+
+    const costcoMat = this.engine.assets.getCostcoMaterial();
+    const concreteMat = this.engine.assets.getConcreteMaterial();
+
+    const bodyGeo = new THREE.BoxGeometry(length, height, width);
+    const body = new THREE.Mesh(bodyGeo, costcoMat);
+    body.position.y = height * 0.5;
+    body.castShadow = true;
+    body.receiveShadow = true;
+    group.add(body);
+
+    // Front Loading / Member Entrance Canopy
+    const canopyGeo = new THREE.BoxGeometry(length * 0.6, 1.2, 10);
+    const canopyMat = new THREE.MeshStandardMaterial({ color: 0xcc2229, metalness: 0.8 });
+    const canopy = new THREE.Mesh(canopyGeo, canopyMat);
+    canopy.position.set(0, 4.5, width * 0.5 + 5.0);
+    canopy.castShadow = true;
+    group.add(canopy);
+
+    this.registerBuilding(group, 'costco_store', 'commercial', 500);
+    return group;
+  }
+
+  /**
+   * Generates Gwangmyeong Cave (광명동굴) Mining Heritage Site Entrance on Gahaksan
+   */
+  createGwangmyeongCaveEntrance(x, z, rotY = 0) {
+    const group = new THREE.Group();
+    const y = this.world ? this.world.terrain.getHeightAt(x, z) : 0;
+    group.position.set(x, y, z);
+    group.rotation.y = rotY;
+
+    const caveMat = this.engine.assets.getCavePortalMaterial();
+    const timberMat = new THREE.MeshStandardMaterial({ color: 0x3d2716, roughness: 0.9 });
+    const rockMat = new THREE.MeshStandardMaterial({ color: 0x38342e, roughness: 0.95 });
+
+    // 1. Rock Portal Cave Frame
+    const portalGeo = new THREE.BoxGeometry(16, 10, 8);
+    const portal = new THREE.Mesh(portalGeo, caveMat);
+    portal.position.set(0, 5.0, 0);
+    portal.castShadow = true;
+    group.add(portal);
+
+    // 2. Cave Mouth Void (Dark Entrance Arch)
+    const mouthGeo = new THREE.CylinderGeometry(3.5, 3.5, 6.0, 12, 1, false, 0, Math.PI);
+    mouthGeo.rotateZ(Math.PI / 2);
+    mouthGeo.rotateY(Math.PI / 2);
+    const mouthMat = new THREE.MeshBasicMaterial({ color: 0x050403 });
+    const mouth = new THREE.Mesh(mouthGeo, mouthMat);
+    mouth.position.set(0, 3.5, 4.1);
+    group.add(mouth);
+
+    // 3. Vintage Mining Ore Cart on Rails
+    const railMat = new THREE.MeshStandardMaterial({ color: 0x6e7680, metalness: 0.9 });
+    const trackGeo = new THREE.BoxGeometry(0.8, 0.15, 12);
+    const track = new THREE.Mesh(trackGeo, railMat);
+    track.position.set(0, 0.1, 7.0);
+    group.add(track);
+
+    const cartGeo = new THREE.BoxGeometry(1.6, 1.2, 2.2);
+    const cartMat = new THREE.MeshStandardMaterial({ color: 0x7c381c, metalness: 0.7 });
+    const cart = new THREE.Mesh(cartGeo, cartMat);
+    cart.position.set(0, 0.8, 7.0);
+    cart.castShadow = true;
+    group.add(cart);
+
+    // Gold/Yellow Cave Lighting Glow
+    const glowGeo = new THREE.SphereGeometry(0.35, 6, 6);
+    const glowMat = new THREE.MeshBasicMaterial({ color: 0xffd24d });
+    const lamp = new THREE.Mesh(glowGeo, glowMat);
+    lamp.position.set(0, 5.5, 4.2);
+    group.add(lamp);
+
+    this.registerBuilding(group, 'gwangmyeong_cave', 'commercial', 200);
+    return group;
+  }
+
   registerBuilding(meshGroup, type, zoneType, occupants) {
     const id = `bld_${++this.buildingIdCounter}`;
     meshGroup.name = id;

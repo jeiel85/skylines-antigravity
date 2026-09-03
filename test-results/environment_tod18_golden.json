@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-09-03T04:49:02.924Z",
+  "timestamp": "2026-09-03T05:02:41.240Z",
   "showcase": "environment",
   "tod": 18,
   "preset": "golden",
   "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\environment_tod18_golden.png",
   "metrics": {
-    "fps": 142,
+    "fps": 95,
     "drawCalls": 1,
     "triangles": 1,
     "textures": 14,

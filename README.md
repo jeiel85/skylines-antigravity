@@ -3,6 +3,8 @@
 > **AAA Cities: Skylines II–class City Builder in Three.js (r174) + Vite**  
 > Built from scratch with plain ES modules, photographic procedural PBR materials, physically plausible atmosphere and diurnal cycle, living city night illumination, and verified zero programmer art.
 
+🔗 **[🎮 Play Live Demo](https://jeiel85.github.io/skylines-antigravity/)**
+
 ![Afternoon Bay Overview](screenshots/demo_city_tod16.5_bay_overview.png)
 
 ---

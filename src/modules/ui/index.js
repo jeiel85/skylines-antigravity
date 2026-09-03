@@ -15,6 +15,7 @@ export class UIModule {
     this.unsubTM = null;
     this.isMapOpen = false;
     this.labelsVisible = true;
+    this.isTimeMachineOpen = true;
     this.currentYear = 2026;
     this.currentWeather = 'clear';
     this.isTimeLapsePlaying = false;
@@ -51,7 +52,7 @@ export class UIModule {
         padding: 12px 18px;
         box-sizing: border-box;
       ">
-        <!-- Top Status Header Bar -->
+        <!-- Top Status Header Bar (Pinned to top) -->
         <div style="
           display: flex;
           align-items: center;
@@ -61,7 +62,7 @@ export class UIModule {
           -webkit-backdrop-filter: blur(18px);
           border: 1px solid rgba(255, 255, 255, 0.12);
           border-radius: 12px;
-          padding: 8px 16px;
+          padding: 7px 16px;
           color: #f0f4f8;
           pointer-events: auto;
           box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
@@ -126,6 +127,21 @@ export class UIModule {
             ">
               👁️ 전체 조감
             </button>
+            <button id="btn-top-toggle-tm" style="
+              background: rgba(56, 189, 248, 0.18);
+              border: 1px solid rgba(56, 189, 248, 0.35);
+              color: #38bdf8;
+              padding: 5px 10px;
+              border-radius: 6px;
+              font-size: 11px;
+              font-weight: 700;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              gap: 4px;
+            ">
+              ⏳ 타임머신
+            </button>
           </div>
 
           <!-- Weather Selector Pills -->
@@ -174,86 +190,6 @@ export class UIModule {
               <button id="btn-speed-pause" style="background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 3px 6px; border-radius: 4px; cursor: pointer; font-size: 10px;">⏸</button>
               <button id="btn-speed-1x" style="background: #2563eb; border: none; color: #fff; padding: 3px 6px; border-radius: 4px; cursor: pointer; font-size: 10px;">1x</button>
               <button id="btn-speed-3x" style="background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 3px 6px; border-radius: 4px; cursor: pointer; font-size: 10px;">3x</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Floating Historical Time Machine Bar -->
-        <div style="
-          margin-top: 8px;
-          display: flex;
-          justify-content: center;
-          pointer-events: auto;
-        ">
-          <div style="
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(13, 20, 32, 0.90);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            border-radius: 12px;
-            padding: 8px 16px;
-            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
-            max-width: 900px;
-            width: 100%;
-          ">
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="font-size: 18px;">⏳</span>
-              <div>
-                <div style="font-size: 10px; color: #94a3b8; font-weight: 700;">역사 타임머신 (TIME MACHINE)</div>
-                <div id="tm-year-display" style="font-size: 17px; font-weight: 800; color: #38bdf8; font-variant-numeric: tabular-nums;">2026년</div>
-              </div>
-            </div>
-
-            <!-- Time-lapse Play/Pause Button -->
-            <button id="btn-tm-play" style="
-              background: #0284c7;
-              border: 1px solid rgba(255,255,255,0.25);
-              color: #ffffff;
-              padding: 6px 12px;
-              border-radius: 8px;
-              font-size: 11px;
-              font-weight: 700;
-              cursor: pointer;
-              white-space: nowrap;
-              display: flex;
-              align-items: center;
-              gap: 4px;
-            ">
-              ▶ 시간여행 재생
-            </button>
-
-            <!-- Year Slider -->
-            <div style="flex: 1; display: flex; flex-direction: column; gap: 2px;">
-              <input id="tm-year-slider" type="range" min="1970" max="2026" value="2026" step="1" style="
-                width: 100%;
-                cursor: pointer;
-                accent-color: #38bdf8;
-              "/>
-              <div style="display: flex; justify-content: space-between; font-size: 9px; color: #64748b; font-weight: 600;">
-                <span>1970 (자연)</span>
-                <span>1973 (기아)</span>
-                <span>1981 (시청)</span>
-                <span>1985 (철산)</span>
-                <span>2004 (KTX)</span>
-                <span>2014 (이케아)</span>
-                <span>2022 (출렁다리)</span>
-                <span>2026 (현재)</span>
-              </div>
-            </div>
-
-            <!-- Historical Milestone Card -->
-            <div style="
-              max-width: 250px;
-              background: rgba(0,0,0,0.35);
-              padding: 6px 10px;
-              border-radius: 8px;
-              border-left: 3px solid #38bdf8;
-            ">
-              <div id="tm-milestone-title" style="font-size: 11px; font-weight: 700; color: #f1f5f9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">광명시 완성</div>
-              <div id="tm-milestone-desc" style="font-size: 9px; color: #94a3b8; line-height: 1.2;">도덕산 출렁다리 완공으로 14개 주요 인프라 완성</div>
             </div>
           </div>
         </div>
@@ -426,35 +362,142 @@ export class UIModule {
           </div>
         </div>
 
-        <!-- Bottom Construction & Management Dock -->
-        <div style="
+        <!-- Bottom Master Controls Dock (Centered at bottom, leaves entire screen wide open) -->
+        <div id="skylines-bottom-dock" style="
           display: flex;
-          justify-content: center;
-          gap: 10px;
+          flex-direction: column;
+          align-items: center;
+          gap: 6px;
           pointer-events: auto;
+          width: 100%;
+          max-width: 900px;
+          margin: 0 auto;
         ">
+          <!-- Sleek Bottom Historical Time Machine Bar -->
+          <div id="tm-dock-bar" style="
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(11, 16, 25, 0.92);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 12px;
+            padding: 6px 14px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            width: 100%;
+            box-sizing: border-box;
+            transition: all 0.25s ease;
+          ">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 16px;">⏳</span>
+              <div>
+                <div style="font-size: 9px; color: #94a3b8; font-weight: 700;">타임머신</div>
+                <div id="tm-year-display" style="font-size: 15px; font-weight: 800; color: #38bdf8; font-variant-numeric: tabular-nums;">2026년</div>
+              </div>
+            </div>
+
+            <!-- Time-lapse Play/Pause Button -->
+            <button id="btn-tm-play" style="
+              background: #0284c7;
+              border: 1px solid rgba(255,255,255,0.25);
+              color: #ffffff;
+              padding: 5px 10px;
+              border-radius: 6px;
+              font-size: 11px;
+              font-weight: 700;
+              cursor: pointer;
+              white-space: nowrap;
+              display: flex;
+              align-items: center;
+              gap: 4px;
+            ">
+              ▶ 재생
+            </button>
+
+            <!-- Year Slider -->
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 1px;">
+              <input id="tm-year-slider" type="range" min="1970" max="2026" value="2026" step="1" style="
+                width: 100%;
+                cursor: pointer;
+                accent-color: #38bdf8;
+                margin: 0;
+              "/>
+              <div style="display: flex; justify-content: space-between; font-size: 9px; color: #64748b; font-weight: 600;">
+                <span>1970(자연)</span>
+                <span>1973(기아)</span>
+                <span>1981(시청)</span>
+                <span>1985(철산)</span>
+                <span>2004(KTX)</span>
+                <span>2014(이케아)</span>
+                <span>2022(출렁다리)</span>
+                <span>2026(현재)</span>
+              </div>
+            </div>
+
+            <!-- Historical Milestone Card -->
+            <div style="
+              max-width: 220px;
+              background: rgba(0,0,0,0.4);
+              padding: 5px 8px;
+              border-radius: 6px;
+              border-left: 3px solid #38bdf8;
+            ">
+              <div id="tm-milestone-title" style="font-size: 10px; font-weight: 700; color: #f1f5f9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">광명시 완성</div>
+              <div id="tm-milestone-desc" style="font-size: 8px; color: #94a3b8; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">도덕산 출렁다리 완공으로 인프라 완성</div>
+            </div>
+
+            <!-- Close / Minimize Button -->
+            <button id="btn-tm-close" style="
+              background: transparent;
+              border: none;
+              color: #94a3b8;
+              font-size: 13px;
+              cursor: pointer;
+              padding: 2px 4px;
+              line-height: 1;
+            " title="타임머신 바 숨기기">✕</button>
+          </div>
+
+          <!-- Bottom Construction & Management Dock -->
           <div style="
             display: flex;
             align-items: center;
             gap: 8px;
-            background: rgba(11, 16, 25, 0.85);
+            background: rgba(11, 16, 25, 0.88);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px;
-            padding: 8px 14px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            border-radius: 12px;
+            padding: 6px 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.45);
           ">
-            <button class="skylines-tool-btn active" data-tool="inspect" style="background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+            <button id="btn-tm-toggle-pill" style="
+              background: rgba(56, 189, 248, 0.15);
+              border: 1px solid rgba(56, 189, 248, 0.35);
+              color: #38bdf8;
+              padding: 6px 10px;
+              border-radius: 6px;
+              font-size: 11px;
+              font-weight: 700;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              gap: 4px;
+            ">
+              ⏳ 타임머신 <span id="tm-toggle-arrow">▾</span>
+            </button>
+            <div style="width: 1px; height: 16px; background: rgba(255,255,255,0.12); margin: 0 2px;"></div>
+            <button class="skylines-tool-btn active" data-tool="inspect" style="background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px;">
               🔍 Inspect
             </button>
-            <button class="skylines-tool-btn" data-tool="roads" style="background: rgba(255,255,255,0.06); border: 1px solid transparent; color: #cbd5e1; padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+            <button class="skylines-tool-btn" data-tool="roads" style="background: rgba(255,255,255,0.06); border: 1px solid transparent; color: #cbd5e1; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px;">
               🛣️ Roads
             </button>
-            <button class="skylines-tool-btn" data-tool="zoning" style="background: rgba(255,255,255,0.06); border: 1px solid transparent; color: #cbd5e1; padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+            <button class="skylines-tool-btn" data-tool="zoning" style="background: rgba(255,255,255,0.06); border: 1px solid transparent; color: #cbd5e1; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px;">
               🟩 Zoning
             </button>
-            <button class="skylines-tool-btn" data-tool="bulldoze" style="background: rgba(255,255,255,0.06); border: 1px solid transparent; color: #f87171; padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+            <button class="skylines-tool-btn" data-tool="bulldoze" style="background: rgba(255,255,255,0.06); border: 1px solid transparent; color: #f87171; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px;">
               🚜 Bulldoze
             </button>
           </div>
@@ -474,6 +517,30 @@ export class UIModule {
     const btnToggleLabels = document.getElementById('btn-toggle-labels');
     const btnGISOverview = document.getElementById('btn-gis-overview');
     const mapModal = document.getElementById('gwangmyeong-map-modal');
+
+    // Time Machine Dock Elements
+    const tmDockBar = document.getElementById('tm-dock-bar');
+    const btnTmTogglePill = document.getElementById('btn-tm-toggle-pill');
+    const btnTopToggleTm = document.getElementById('btn-top-toggle-tm');
+    const btnTmClose = document.getElementById('btn-tm-close');
+    const tmToggleArrow = document.getElementById('tm-toggle-arrow');
+
+    const toggleTimeMachineBar = () => {
+      this.isTimeMachineOpen = !this.isTimeMachineOpen;
+      if (tmDockBar) {
+        tmDockBar.style.display = this.isTimeMachineOpen ? 'flex' : 'none';
+      }
+      if (tmToggleArrow) {
+        tmToggleArrow.textContent = this.isTimeMachineOpen ? '▾' : '▴';
+      }
+      if (btnTopToggleTm) {
+        btnTopToggleTm.style.background = this.isTimeMachineOpen ? 'rgba(56, 189, 248, 0.25)' : 'rgba(255,255,255,0.08)';
+      }
+    };
+
+    if (btnTmTogglePill) btnTmTogglePill.onclick = toggleTimeMachineBar;
+    if (btnTopToggleTm) btnTopToggleTm.onclick = toggleTimeMachineBar;
+    if (btnTmClose) btnTmClose.onclick = toggleTimeMachineBar;
 
     // 3D GIS Labels Toggle
     if (btnToggleLabels) {
@@ -530,7 +597,7 @@ export class UIModule {
       btnPlayTM.onclick = () => {
         this.isTimeLapsePlaying = !this.isTimeLapsePlaying;
         if (this.isTimeLapsePlaying) {
-          btnPlayTM.textContent = '⏸ 시간여행 일시정지';
+          btnPlayTM.textContent = '⏸ 정지';
           btnPlayTM.style.background = '#e11d48';
 
           if (this.currentYear >= 2026) {
@@ -541,7 +608,7 @@ export class UIModule {
           this.timeLapseInterval = setInterval(() => {
             if (this.currentYear >= 2026) {
               this.isTimeLapsePlaying = false;
-              btnPlayTM.textContent = '▶ 시간여행 재생';
+              btnPlayTM.textContent = '▶ 재생';
               btnPlayTM.style.background = '#0284c7';
               clearInterval(this.timeLapseInterval);
               return;
@@ -551,7 +618,7 @@ export class UIModule {
             if (tmSlider) tmSlider.value = nextYear;
           }, 650);
         } else {
-          btnPlayTM.textContent = '▶ 시간여행 재생';
+          btnPlayTM.textContent = '▶ 재생';
           btnPlayTM.style.background = '#0284c7';
           if (this.timeLapseInterval) clearInterval(this.timeLapseInterval);
         }

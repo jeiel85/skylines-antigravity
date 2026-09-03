@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-09-03T05:57:06.801Z",
+  "timestamp": "2026-09-03T06:13:57.209Z",
   "showcase": "demo_city",
   "tod": 14,
   "preset": "gis_overview",
   "screenshot": "D:\\Project\\skylines-antigravity\\screenshots\\demo_city_tod14_gis_overview.png",
   "metrics": {
-    "fps": 29,
+    "fps": 38,
     "drawCalls": 1,
     "triangles": 1,
     "textures": 63,

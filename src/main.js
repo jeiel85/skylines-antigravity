@@ -117,3 +117,12 @@ async function bootstrap() {
 }
 
 bootstrap();
+
+// PWA: 서비스워커 등록 (오프라인 실행·홈 화면 설치)
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch((error) => {
+      console.warn('Service worker registration failed:', error);
+    });
+  });
+}
